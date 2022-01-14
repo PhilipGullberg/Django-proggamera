@@ -1,0 +1,18 @@
+.nav{
+    background-color: #1C0230;
+    
+}
+
+.brand-img{
+   filter: brightness(0) invert(1); 
+    
+}
+.logo-text{
+    background: -webkit-linear-gradient(180deg, #FFAB08, #B973DE);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+}
+.fa-bell{
+    color:white;
+}

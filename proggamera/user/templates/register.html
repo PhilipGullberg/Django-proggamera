@@ -1,0 +1,126 @@
+{% extends 'landing.html' %}
+{% load socialaccount %}
+{% load static %}
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/style.css' %}">
+{%endblock%}
+
+{% block content%}
+    <div class="d-flex justify-content-center align-items-end center-container">
+        
+        <form class=" bg-light d-flex  w-50 p-2 register-form " method="POST">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-12"><h1>Registrera ett konto</h1></div>
+                
+                <div class="col-md-6">
+                    <div class="form-group position-relative">
+                        <label>Förnamn: <span class="text-danger">*</span></label>
+                        {{form.first_name}}
+                    </div>
+                    {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group position-relative">
+                        <label>Efternamn: <span class="text-danger">*</span></label>
+                        {{form.last_name}}
+                    </div>
+                    {% if form.last_name.errors %}
+                    {% for error in form.last_name.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label>Email <span class="text-danger">*</span></label>
+                        {{form.email}}
+                    </div>
+                    {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label>Användarnamn <span class="text-danger">*</span></label>
+                        {{form.username}}
+                    </div>
+                    {% if form.username.errors %}
+                    {% for error in form.username.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label>Lösenord <span class="text-danger">*</span></label>
+                        {{form.password1}}
+                    </div>
+                    {% if form.password1.errors %}
+                    {% for error in form.password1.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group position-relative">
+                        <label>Bekräfta lösenord <span class="text-danger">*</span></label>
+                        {{form.password2}}
+                    </div>
+                    {% if form.password2.errors %}
+                    {% for error in form.password2.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                    
+                        <label>Välj användartyp <span class="text-danger">*</span></label>
+                        {{form.user_type}}
+                    
+                        {% if form.check.errors %}
+                        {% for error in form.check.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary w-100" type="submit">Registrera</button>
+                </div>
+                <div class="col-md-12 " >
+                    <button type="button" class="login-with-google-btn mx-0 mt-2" >
+                        <a  href="{% provider_login_url 'google' %}">Registrera med Google</a>
+                      </button>
+                </div>
+                <div class="mx-4">
+                    <p class="mb-0 mt-3"><small class="text-dark mr-2">Har du redan ett konto ?</small> <a href="{% url 'login' %}"
+                            class="text-dark font-weight-bold">Logga in</a></p>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% endblock%}

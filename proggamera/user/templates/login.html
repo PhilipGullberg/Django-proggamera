@@ -1,0 +1,36 @@
+{% extends 'landing.html' %}
+{% load socialaccount %}
+{% load static %}
+{% block extrahead %}
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans">
+    <link rel="stylesheet" type="text/css" href="{% static 'user/style.css' %}">
+{%endblock%}
+{% block content%}
+<div class="d-flex justify-content-center login-container ">
+    <div class="bg-light w-30 py-3 px-5 rounded">
+        <h1>Logga in</h1>
+        <form method="POST">
+        {% csrf_token %}
+        <div class="col-md-12">
+            <label class="col-md-12 px-0" for="">Användare: </label>
+            {{form.username}}
+        </div>
+        <div class="col-md-12">
+            <label class="col-md-12 px-0 mt-2"  for="">Lösenord: </label>
+            {{form.password}}
+        </div>
+        <button class="btn btn-primary px-5 mx-3 mt-2" type="submit">Logga in</button>
+        <div >
+            <button type="button" class="login-with-google-btn mx-3 mt-2" >
+                <a  href="{% provider_login_url 'google' %}">Logga in med Google</a>
+              </button>
+              
+
+        </div>
+        </form>
+        <div class="mx-3 mt-2">
+            <p >Har du inget konto? <a class="" href="{% url 'register'%} ">Registrera dig här</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock%}
