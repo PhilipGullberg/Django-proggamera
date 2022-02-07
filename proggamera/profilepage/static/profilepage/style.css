@@ -16,3 +16,117 @@
 .fa-bell{
     color:white;
 }
+
+/* Sidebar */
+
+.sidebar{
+    z-index: 1;
+    top: 0;
+    background: #2f323a;
+    margin-top: 56px;
+    padding-top: 30px;
+    position: fixed;
+    left: 0;
+    width: 220px;
+    height: calc(100% - 7%);
+
+  }
+  
+  .profile_info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .sidebar .profile_info .profile_image{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar .profile_info h4{
+    color: #ccc;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar a{
+    color: #fff;
+    display: block;
+    width: 100%;
+    line-height: 60px;
+    text-decoration: none;
+    padding-left: 40px;
+    box-sizing: border-box;
+
+  }
+  
+  .sidebar a:hover{
+    background: #464646;
+    color:#B973DE;
+  }
+  
+  .sidebar i{
+    padding-right: 10px;
+  }
+  /* Content*/
+  .content{
+    margin-left: 250px;
+    background: url(background.png) no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: 0.5s;
+  }
+  /* standard button */
+  .stnd-btn {
+    background: #D27BDA;
+    background-image: -webkit-linear-gradient(top, #D27BDA, #B530C0);
+    background-image: -moz-linear-gradient(top, #D27BDA, #B530C0);
+    background-image: -ms-linear-gradient(top, #D27BDA, #B530C0);
+    background-image: -o-linear-gradient(top, #D27BDA, #B530C0);
+    background-image: -webkit-gradient(top, #D27BDA, #B530C0);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-family: Helvetica;
+    font-size: 14px;
+    font-weight: 100;
+    padding: 8px;
+    -webkit-box-shadow: 1px 1px 10px 3px #868585;
+    -moz-box-shadow: 1px 1px 10px 3px #868585;
+    box-shadow: 1px 1px 10px 3px #868585;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+ }
+ 
+ .stnd-btn:hover {
+    background: #cc37da;
+    border: solid #EBEBEB 0;
+    -webkit-border-radius: 10px;
+    color:#FFFF;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    text-decoration: none;
+ }
+
+ /* Classroom style */
+ .classes{
+     display:flex;
+     justify-content: start;
+     gap:5px;
+     flex-wrap: wrap;
+ }
+.class{
+    background-color: #B973DE;
+    width: 300px;
+    height:450px;
+    border-radius: 5px;
+    padding:2%;
+    margin-top:1%;
+}

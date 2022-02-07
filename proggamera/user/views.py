@@ -53,5 +53,6 @@ def login_req(request):
     return render(request, 'login.html',{'form':form})
 
 
-def logout_view(request):
+def logout_req(request):
     logout(request)
+    return redirect('landing')

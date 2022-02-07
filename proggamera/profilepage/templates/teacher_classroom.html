@@ -1,0 +1,75 @@
+{% extends 'profile_layout.html' %}
+{% block extrahead%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#add_class_form').hide()
+        $('#add_class').click(function () {
+            $('#add_class_form').show()
+        });
+    });
+</script>
+<script src="https://unpkg.com/htmx.org@1.1.0"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+</script>
+{%endblock%}
+{% block sidebar %}
+<a href="#"><i class="fas fa-desktop"></i><span>Översikt</span></a>
+<a href="#"><i class="fas fa-cogs"></i><span>Kurser</span></a>
+<a href="#"><i class="fas fa-table"></i><span>Klassrum</span></a>
+<a href="#"><i class="fas fa-th"></i><span>Resultat</span></a>
+<a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
+<a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
+{% endblock %}
+{% block content %}
+<h1>Your classrooms</h1>
+<div class="stnd-btn"><a style="text-decoration: none; color:white;" id="add_class">+ Lägg till klass</a> </div>
+<div id="add_class_form">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit">
+    </form>
+</div>
+<div class="classes">
+    {% for classroom in classes.all %}
+    <div class="class">
+        <h3>Klass: {{classroom.name}}</h3>
+
+
+        <hr style="border-color:white;">
+        <p>Lärare: {{classroom.teacher}} </p>
+        <h4>Klassens kurser:</h4>
+        {% for course in classroom.courses.all %}
+
+        {{course}}
+        <br>
+        {%endfor%}
+        <h4>Elever:</h4>
+        {% for student in classroom.students.all %}
+        {{student}}
+
+
+        <br>
+        {%endfor%}
+
+        <hr>
+        <div class="class-footer ">
+            <div class="stnd-btn" type="button"><a href="{% url 'curr_classroom' classroom.id %}"
+                    style="text-decoration: none; color:white;">Go to classroom</a></div>
+        </div>
+    </div>
+    
+    {%endfor%}
+</div>
+
+
+{% endblock%}
+{% block endscripts %}
+
+<script src="https://unpkg.com/htmx.org@1.1.0"></script>
+{%endblock%}

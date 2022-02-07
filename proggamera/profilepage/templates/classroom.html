@@ -1,0 +1,94 @@
+{% extends 'profile_layout.html' %}
+
+{% block content%}
+
+<div class=" pl-5 pt-3 pb-3  container bg-light">
+    <div class="stnd-btn" type="button"><a href="{% url 't_classroom' %}" style="text-decoration: none; color:white;">
+            <i class="fas fa-arrow-left"></i> Gå tillbaks</a></div>
+
+    <h1 class="mt-3">Klass: {{classroom.name}}</h1>
+    <div class="courses">
+        <hr>
+        <h3>Kurser: </h3>
+        <ul>
+            {% for course in courses %}
+            <li>{{course}}</li>
+            {%endfor%}
+        </ul>
+        <div class="stnd-btn" type="button"><a style="text-decoration: none; color:white;">+ Lägg till kurs</a></div>
+    </div>
+    <div class="students mt-3">
+        <h3>Elever:</h3>
+        <ul>
+            {% for student in students %}
+            <li>{{student}}<a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2">  x</span></a> </li>
+            
+            {%endfor%}
+        </ul>
+        <div class="stnd-btn" id="add_btn" type="button" data-toggle="modal" id="#add">
+            <a  href="{% url 'add_students' %}" style="text-decoration:none; color:white;">+ Lägg till elever</a></div>
+        </div>
+        <div id="add_student_form" style="display:none" >
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Klart">
+            </form>
+        </div>
+    
+    <!-- <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add_student_modalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add_student_label">Lägg till elever</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Sök på elever i din organisation och lägg till de till ditt klassrum
+                    <br>
+                    <br>
+                    
+                    <form class="">
+                        {%csrf_token%}
+                        <fieldset>
+                            <label for="search">Sök elev:</label>
+                            <input type="text" hx-post="{% url 'search_students' %}" name='search'
+                                hx-target='#student_results' hx-trigger="keyup changed delay 500ms"
+                                class="form-control-sm mr-2">
+                        </fieldset>
+
+                    </form>
+                    <div class="container d-flex mt-2 ">
+                        <br>
+                        
+                        
+                        {% include 'search_result.html' %}
+                        <div class=" mr-5" >
+                            <h5>Tillagda:</h5>
+                            {% include 'temp_added.html' %}
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div> -->
+
+</div>
+<script>
+    console.log("hello")
+    let add_btn = document.querySelector('#add_btn');
+    add_btn.addEventListener('click', add_student);
+    function add_student(){
+        const add_form = document.querySelector('#add_student_form');
+        add_form.style="display:block";
+        console.log(add_form)
+    }
+   
+</script>
+{% endblock %}
+

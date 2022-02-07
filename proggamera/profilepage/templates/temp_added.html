@@ -1,0 +1,18 @@
+<div id="added_students">
+                                
+    {% if added_students%}
+    <ul>
+        <form  style="display:inline-block">
+            <button href="" >Lägg till alla</button> 
+             
+         </form>
+        {% for student in added_students %}
+        <li>{{student}}</li>
+        {% endfor %}
+        
+        
+    </ul>
+    {% else %}
+    <p>Inga tillagda</p>
+    {%endif%}
+</div>

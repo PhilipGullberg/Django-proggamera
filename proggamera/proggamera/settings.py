@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'main',
     'user',
-    'profilepage'
+    'profilepage',
+    'invitations',
+    
 ]
 SITE_ID = 2
 LOGIN_REDIRECT_URL="/"

@@ -1,67 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
-        {% block extrahead %}{%endblock%}
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    </head>
-    
-</head>
-<body>
-    <nav>
-        <h1 class="bg-dark">navbar</h1>
-        <a href="{% url 'register' %}">register</a>
-        <a href="{% url 'login' %}">login</a>
-    </nav>
-    
-    {% block content%}
-        <h1>Landing page</h1>
-        {% if user.is_authenticated %}
-        <p>Welcome {{user.username.title}}</p>
-        {% else %}
-        <p>Welcome, please login</p>
-        {% endif %}
-        {% if no_role == True %}
-        <h1>Du måste välja roll innan du kan komma åt dina sidor</h1>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-           Välj roll
-          </button>
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Är du lärare eller elev?</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  Välj om du är elev eller lärare för att komma åt rätt sidor.
-                  <form action="">
-                      <label for="choice">Lärare</label>
-                      <input type="radio" name="choice" id="teacher">
-                      <label for="elev">Elev</label>
-                      <input type="radio" name="choice" id="elev">
-                  </form>
-                </div>
-                
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        {%endif%}
-    {% endblock%}
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+<head>
+
+  <head>
+    {%load static%}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    {% block extrahead %}{%endblock%}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="left-side">
+      <a style="text-decoration: none" href="{% url 'landing' %}"><p class="d-flex logo-text">ProggaMera</p></a>
+    </div>
+    
+    <ul class="nav-text">
+      <li><a href="course">Courses</a></li>
+      <li><a href="pricing">Pricing</a></li>
+      <li><a href="aboutus">About us</a></li>
+    </ul>
+    {% if user.is_authenticated %}
+    <div class="dropdown">
+      <a class="btn" onclick="dropdown()">{{ user.get_username }} <img style="max-width: 10%;"
+          src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy"><i
+          style="margin-left: 1%" class="fas fa-sort-down"></i></a>
+      <div id="myDropdown" class="dropdown-content">
+        {% if user_type == "Student" %}
+        <a href="{% url 'student_dash' %}">My profile</a>
+        {% else %}
+        <a href="{% url 'teacher_dash' %}">My profile</a>
+        {%endif%}
+        <hr class="hr-line">
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+    </div>
+
+    {% else %}
+    <div class="register-buttons">
+      <a class="login" href="{% url 'login' %}"> Log In</a>
+      <a href="{% url 'register' %}" class="register-btn">Registrera dig</a>
+    </div>
+
+    {%endif%}
+
+  </nav>
+
+
+  {% block content%}
+  <div class="content">
+    <h1>Landing page</h1>
+  {% if user.is_authenticated %}
+  <p>Welcome {{user.username.title}}</p>
+  {% else %}
+  <p>Welcome, please login</p>
+  {% endif %}
+  {% if no_role == True %}
+  <h1>Du måste välja roll innan du kan komma åt dina sidor</h1>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Välj roll
+  </button>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Är du lärare eller elev?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Välj om du är elev eller lärare för att komma åt rätt sidor.
+
+        </div>
+
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary"><a style="text-decoration: none; color:white"
+              href="{% url 'student_dash' %}"> Elev</a></button>
+          <button type="button" class="btn btn-primary"> <a style="text-decoration: none; color:white"
+              href="{% url 'teacher_dash' %}"> Lärare</a></button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endif%}
+  {% endblock%}
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#exampleModal").modal('show');
+    });
+  </script>
 </body>
+
 </html>
