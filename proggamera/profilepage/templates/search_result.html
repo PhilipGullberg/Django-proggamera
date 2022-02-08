@@ -1,30 +1,16 @@
+{%extends 'add_student.html' %}
+{% block content%}
+<br>
+<br>
+<div class="stnd-btn" type="button"><a href="{% url 'add_students' classroom.id %}" style="text-decoration: none; color:white;">
+    <i class="fas fa-arrow-left"></i> Gå tillbaks och sök efter annan elev</a></div>
 <div id="student_results" class="mr-auto" >
-    {% if searched_students %}
-    
+    <h5>Resultat:</h5>
     <ul>
-        <h5>Elever:</h5>
-        
-        {% for student in searched_students %}
-        
-            <li>
-                {{student}}
-                <form  style="display:inline-block">
-                   <button hx-post="{% url 'add_students' student %}"
-                    hx-target="#added_students" >Lägg till</button> 
-                    
-                </form>
-                
-            </li>
-            
-        
-        {%endfor%}
-        
-    </ul>
-    {% else %}
-        {% if added %}
-            {{added}}
-        {% else %}
-        <p></p>
-        {%endif%}
-    {%endif%}
+    {%for student in students %}
+    
+        <li>{{student}} <span><div class="btn btn-success p-1" type="button"><a href="{% url 'added' classroom.id student.id %}" style="text-decoration: none; color:white;">+ Lägg till</a></span></li>
+    {%endfor%}
+</ul>
 </div>
+{%endblock%}

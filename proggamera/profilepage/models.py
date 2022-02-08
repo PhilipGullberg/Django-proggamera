@@ -16,7 +16,7 @@ class Chapters(models.Model):
 class Student(models.Model):
     user=models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    courses=models.ManyToManyField(Course)
+    courses=models.ManyToManyField(Course, blank=True)
     license_active=models.BooleanField()
     def __str__(self):
         return self.user.username

@@ -2,6 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import RegisterForm
+from profilepage.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -18,9 +19,14 @@ def register(request):
             user=form.save()
             user_type=form.cleaned_data.get('user_type')
             if user_type =="T":
+                print("test?")
                 user.is_teacher=True
+                add_teacher=Teacher(user=request.user)
+                add_teacher.save()
             else:
                 user.is_student=True
+                add_student=Student(user=request.user)
+                add_student.save()
             user.save()
 
             messages.success(request, 'Account was created for ')

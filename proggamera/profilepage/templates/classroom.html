@@ -26,57 +26,11 @@
             {%endfor%}
         </ul>
         <div class="stnd-btn" id="add_btn" type="button" data-toggle="modal" id="#add">
-            <a  href="{% url 'add_students' %}" style="text-decoration:none; color:white;">+ Lägg till elever</a></div>
+            <a  href="{% url 'add_students' classroom.id %}" style="text-decoration:none; color:white;">+ Lägg till elever</a></div>
         </div>
-        <div id="add_student_form" style="display:none" >
-            <form action="" method="POST">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Klart">
-            </form>
-        </div>
+        
     
-    <!-- <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="add_student_modalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="add_student_label">Lägg till elever</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Sök på elever i din organisation och lägg till de till ditt klassrum
-                    <br>
-                    <br>
-                    
-                    <form class="">
-                        {%csrf_token%}
-                        <fieldset>
-                            <label for="search">Sök elev:</label>
-                            <input type="text" hx-post="{% url 'search_students' %}" name='search'
-                                hx-target='#student_results' hx-trigger="keyup changed delay 500ms"
-                                class="form-control-sm mr-2">
-                        </fieldset>
-
-                    </form>
-                    <div class="container d-flex mt-2 ">
-                        <br>
-                        
-                        
-                        {% include 'search_result.html' %}
-                        <div class=" mr-5" >
-                            <h5>Tillagda:</h5>
-                            {% include 'temp_added.html' %}
-                            
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </div> -->
+    
 
 </div>
 <script>

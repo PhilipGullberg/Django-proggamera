@@ -26,8 +26,9 @@ def studentdash(request):
     if request.user.is_authenticated:
         if request.user.is_student :
             user=CustomUser.objects.get(username=request.user.username)
-            user.is_teacher=True
-            return render(request,'teacherdash.html')
+            user.is_student=True
+            user.save()
+            return render(request,'studentdash.html')
         else:
             request.user.is_student = True
             return render(request, 'studentdash.html')
@@ -71,6 +72,20 @@ def t_classroom(request):
 
     return render(request, 'teacher_classroom.html',{"form":form,"classes":classes})
 
+def s_classroom(request):
+    try: 
+        curr_user=Student.objects.get(user=request.user)
+        classes=Classroom.objects.filter(students=curr_user)
+    except Classroom.DoesNotExist:
+        classes=[]
+
+    return render(request,'student_classrooms.html',{"classes":classes})
+
+def s_courses(request):
+    curr_user=Student.objects.get(user=request.user)
+    courses=Course.objects.filter(student=curr_user)
+    return render(request, 'student_courses.html',{"courses":courses})
+
 def curr_classroom(request, pk):
     classroom = Classroom.objects.get(id=pk)
     courses=Course.objects.filter(classroom__id=pk)
@@ -83,9 +98,8 @@ def curr_classroom(request, pk):
     context={'classroom':classroom, 'courses':courses,'students':students}
     return render(request,'classroom.html',context)
 
-def add_students(request):
-    print("on add_students() ")
-    #curr_classroom=Classroom.objects.get(id=classid)
+def add_students(request, pk):
+    curr_classroom=Classroom.objects.get(id=pk)
     #print(curr_classroom)
     if request.method == 'POST':
         form = add_student_form(request.POST)
@@ -98,7 +112,7 @@ def add_students(request):
         student=""
         print(form)
     
-    return render(request, 'classroom.html',{"added_students":student,"form":form})
+    return render(request, 'add_student.html',{"added_students":student,"form":form, "classroom":curr_classroom})
 
 def remove_student(request, student, classroom):
     curr_student=Student.objects.get(id=student)
@@ -124,11 +138,23 @@ def invite_students(request):
     #invite.save()
     #invite.send_invitation(request)
     return
-def search_students(request):
-    
+def search_students(request, pk):
+    curr_classroom=Classroom.objects.get(id=pk)
     if request.method=="POST":
         search_text=request.POST.get("search")
         result=Student.objects.filter(user__username__contains=search_text)
     else:
         result=""
-    return render(request, 'search_result.html',{'searched_students':result})
+    return render(request, 'search_result.html',{'students':result, 'classroom':curr_classroom})
+
+def added(request, pk, student):
+    curr_classroom=Classroom.objects.get(id=pk)
+    curr_student=Student.objects.get(id=student)
+    curr_classroom.students.add(curr_student)
+    class_courses=Course.objects.filter(classroom__name=curr_classroom)
+    for course in class_courses:
+        curr_student.courses.add(course)
+    print(class_courses)
+    print(curr_classroom, curr_student)
+    message= f"Lade till {curr_student}"
+    return render(request, 'add_student.html',{'classroom':curr_classroom, "message":message})

@@ -1,0 +1,29 @@
+{% extends 'profile_layout.html' %}
+
+{%block content%}
+Här är dina klassrum
+<div class="classes">
+    {% for classroom in classes.all %}
+    <div class="class">
+        <h3>Klass: {{classroom.name}}</h3>
+
+
+        <hr style="border-color:white;">
+        <p>Lärare: {{classroom.teacher}} </p>
+        <h4>Klassens kurser:</h4>
+        {% for course in classroom.courses.all %}
+
+        {{course}}
+        <br>
+        {%endfor%}
+
+        <hr>
+        <div class="class-footer ">
+            <div class="stnd-btn" type="button"><a
+                    style="text-decoration: none; color:white;">Gå till klassrummet</a></div>
+        </div>
+    </div>
+    
+    {%endfor%}
+</div>
+{%endblock%}
