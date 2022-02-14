@@ -1,0 +1,100 @@
+/* Sidebar CSS*/
+*{
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.sidebar-course{
+    padding-top:20px;
+    width:300px;
+    float:left;
+    background-color: #232323;
+    position: fixed;
+    color:white;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition:2s all;
+}
+.card{
+    background-color: #232323;
+    border-top:1px solid grey;
+    border-bottom:1px solid grey;
+}
+.card-body{
+    padding-top:0px;
+}
+.sub-text{
+    background-color: #232323;
+    border-bottom:1px solid grey;
+    padding-bottom: 0;
+}
+hr{
+    border-color:white;
+}
+.pl-4{
+    margin-bottom: 10px !important;
+    margin-top: 10px !important;
+}
+.sidebar-course h7, .sidebar-course p a{
+    color:white;
+}
+.close{
+    transform: translateY(900px);
+    transition:0.5s all;
+}
+.open{
+    display: block;
+    transform: translate(0px);
+    transition: 0.5s all;
+}
+/*Footer css*/
+.footer{
+    background-color: #232323;
+    z-index: 10000000000;
+    color:white;
+    height:7vh;
+}
+#sidebarOpen{
+    cursor:pointer;
+}
+.back-button{
+    background-color:lightgrey;
+    color:black;
+    border-radius: 5px;
+    padding:5px;
+}
+.next-button{
+    background-color:purple;
+    color:white;
+    border-radius: 5px;
+    padding:5px;
+}
+.video{
+    padding:5px;
+}
+
+/*code blocks*/
+.hljs-ln td{
+    padding:0px !important;
+    padding-right:15px !important;
+}
+.hljs-ln-numbers {
+    padding-right: 10px;
+    color:grey;
+}
+h5{
+    padding-bottom: 10px;
+    padding-top:25px;
+}
+
+/* content */
+.content{
+    padding-left:15%;
+    padding-right:5%;
+    line-height: 30px;
+
+    font-size:14px;
+    color:rgb(46, 46, 46);
+}

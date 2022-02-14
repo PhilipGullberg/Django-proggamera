@@ -1,1 +1,153 @@
-<h3>Hello</h3>
+{% extends 'profile_layout.html' %}
+
+{% block extrahead%}
+{% load static %}
+<link rel="stylesheet" href="{% static 'courses/style.css' %}">
+<link rel="stylesheet" href="/path/to/styles/default.min.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>hljs.initLineNumbersOnLoad();</script>
+
+{%endblock%}
+{% block sidebar %}
+
+<section id="sidebar" class="sidebar-course close">
+<div>
+    <div id="accordion">
+        
+    <h4 id="sidebarCollapse" style="cursor:pointer;" class="text-center pb-2 d-flex justify-content-around align-items-center">{{course}}  <i id="sidebarCollapse" class="fas fa-solid fa-bars fa-sm"> </i></h4>
+    {% for chapter in chapters%}
+   
+    <div class="card" >
+        
+        <div class="card-header d-flex justify-content-between align-items-center"  data-toggle="collapse" data-target="#collapse{{forloop.counter}}"  id="headingOne">
+          <h6 class="mb-0" >
+            
+            <button class="btn btn-link  " data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapse{{forloop.counter}}">
+                <h7>{{forloop.counter0}}. {{chapter}} </h7>
+            </button>
+          </h6>
+          <i class="fas fa-arrow-down ml-5"></i>
+        </div>
+       
+    
+        <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+           
+            {% for subchap in chapter.sub.all %}
+                
+                <div class="sub-text"> <p class="pl-4"><a class="" href="?page={{forloop.counter}} ">{{forloop.counter0}}. {{subchap}}</a></p></div>
+             {%endfor%}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    
+    {%endfor%}
+
+</div>
+</section>
+{%endblock%}
+{% block content %}
+
+<div id="cont" class="d-flex justify-content-center course-content pt-2">
+    {% if page_obj %}
+    {% load embed_video_tags %}
+        {% for subchapter in page_obj%}
+        
+        <div class="cont ml-5 w-75 pl-5 pr-5">
+            <div class="course-content pt-3 ">
+                
+                
+                <h3 ><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
+            </div> 
+            <h5><b>{% video subchapter.video.video 'tiny' %}
+            </b></h5>
+    
+            <div class=" pb-2" ><p class="text-justify">{% autoescape off %}{{subchapter.content}}{% endautoescape %}</p></div>
+            <br>
+            {% if subchapter.quiz_set.all %}
+            <div class="quiz pb-5 bg-light p-2 pl-5 pt-4">
+                <h3>Quiz</h3>
+                {% for quiz in subchapter.quiz_set.all %}
+                <form method="POST" action="" class="pt-1 pb-2 ">
+                    {% csrf_token %}
+                    <label for="{{quiz.question}}"></label> <h6>{{quiz.question}}</h6></input>
+               
+                    <input type="radio" name="{{quiz.question}}" id="op1" value="{{quiz.op1}}"> {{quiz.op1}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.question}}" id="op2" value="{{quiz.op2}}">  {{quiz.op2}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.question}}" id="op3" value="{{quiz.op3}}"> {{quiz.op3}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.question}}" id="op4" value="{{quiz.op4}}"> {{quiz.op4}}</input>
+                
+                   <br>
+                   <br>
+                {%endfor%}
+                <input type="submit" value="Answer">
+                </form>
+            </div>
+           
+       
+            {%endif%}
+        {%endfor%}
+    {%endif%}
+    
+</div>
+<footer class="footer fixed-bottom d-flex justify-content-between align-items-center">
+    <div id="sidebarOpen" class=""><h5 class="ml-5 ">{{course}}<i   class="fas fa-solid fa-bars fa-sm ml-5"></i></h5></div>
+    <div class="d-flex  justify-content-around align-items-center">
+        {% if page_obj.has_previous %}
+        <div class="back-button"> <i class=" fas fa-solid fa-angle-left"></i> <a style="color:black;" href="?page={{ page_obj.previous_page_number }}"> Bakåt</a></div>
+        {% endif %}
+        <p class="ml-2 mr-2 pt-3">Sida {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</p>
+        {% if page_obj.has_next %}
+            <div class="next-button" ><a style="color:white;" href="?page={{ page_obj.next_page_number }}"> Nästa </a> <i class=" fas fa-solid fa-angle-right"></i></div>
+        {%else%}
+        <!-- TODO 
+        Lägg till så att man hoppar till nästa kapitel, eller att man får bekräftelse att man är klar på något sätt
+        -->
+        <div class="btn-success p-1" ><a style="color:white;" href="{% url 'courses' course.id%}"> Klar med kapitlet </a> <i class=" fas fa-solid fa-angle-right"></i></div>
+        {% endif %}
+        
+        </div>
+    <div>
+        <div id="sidebar" class="ml-5 mr-5"><h5 >Uppgifter<i class="fas fa-solid fa-bars fa-sm ml-3 mr-2"></i></h5></div>
+    </div>
+</footer>
+
+<script>
+    $(document).ready(function () {
+        $("pre").css({"color":"white","border-radius":"5px", "filter": "drop-shadow(0 0 0.3rem grey)"}); 
+        $("code").css({"color":"white","padding-left":"20px","padding-top":"10px","padding-bottom":"5px","border-radius":"7px", "filter": "drop-shadow(0 0 0.3rem grey)"});
+        $('.content').css({"margin-left":"0px"});
+        $('#sidebarCollapse').on('click', function () {
+            console.log("hello")
+            $('.content').css({"margin-left":"0px"});
+                $('#sidebar').toggleClass('close');
+                $('#sidebar').removeClass('open');
+        });
+        $('#sidebarOpen').on('click', function () {
+            if($('#sidebar').hasClass('close')){
+                $('.content').css({"margin-left":"100px"});
+                $('#sidebar').toggleClass('open');
+                $('#sidebar').removeClass('close');
+            }
+            else{
+                $('.content').css({"margin-left":"0px"});
+                $('#sidebar').toggleClass('close');
+                $('#sidebar').removeClass('open');
+            }
+                
+                
+            
+        });
+    });
+
+</script>
+
+{%endblock%}

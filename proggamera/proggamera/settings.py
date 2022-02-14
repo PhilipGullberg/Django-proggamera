@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'user',
     'profilepage',
     'invitations',
+    'courses',
+    'embed_video',
     
 ]
 SITE_ID = 2
