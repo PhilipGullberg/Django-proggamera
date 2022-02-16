@@ -47,12 +47,12 @@
                         <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
                             alt="Black and White Portrait of a Man" loading="lazy" />
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLinkAvatar">
+                    <ul class="dropdown-menu dropdown-menu-end" style="left:auto; right:0;" aria-labelledby="dropdownMenuLinkAvatar">
                         <li>
-                            <a class="dropdown-item" href="#">My profile</a>
+                            <a class="dropdown-item" href="{% url 'student_dash' %}">My profile</a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         </li>
                     </ul>
                 </div>

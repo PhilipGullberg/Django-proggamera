@@ -22,3 +22,12 @@ class Quiz (models.Model):
     
     def __str__(self):
         return self.question
+
+class Quizresult(models.Model):
+    quiz=models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    students=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
+    answers=models.CharField(max_length=100)
+    result=models.IntegerField()
+
+    def __str__(self):
+        return f"{self.students} result for {self.quiz}"

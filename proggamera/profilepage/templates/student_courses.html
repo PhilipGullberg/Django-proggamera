@@ -4,7 +4,7 @@
 <h3>Här är dina kurser</h3>
 {% for course in courses%}
     {{course}}
-    <div class="stnd-btn" type="button"><a href="{% url 'courses' course.id %}" style="text-decoration: none; color:white;">
+    <div class="stnd-btn" type="button"><a href="{% url 'subchapter' course.id 1 1 %}" style="text-decoration: none; color:white;">
          Gå till kurs  </a><i class="fas fa-arrow-right"></i></div>
 {%endfor%}
 {%endblock%}
