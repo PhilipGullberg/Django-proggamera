@@ -8,94 +8,302 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link rel="stylesheet" href="{% static 'main/style.css' %}">
     {% block extrahead %}{%endblock%}
+    <script src="https://kit.fontawesome.com/dcd3bbc21c.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>ProggaMera</title>
+    <link rel="ICON" href="https://icon-library.com/images/icon-programing/icon-programing-12.jpg" type="image/ico" />
   </head>
 
 </head>
 
 <body>
-  <nav class="navbar">
-    <div class="left-side">
-      <a style="text-decoration: none" href="{% url 'landing' %}"><p class="d-flex logo-text">ProggaMera</p></a>
-    </div>
-    
-    <ul class="nav-text">
-      <li><a href="course">Courses</a></li>
-      <li><a href="pricing">Pricing</a></li>
-      <li><a href="aboutus">About us</a></li>
-    </ul>
-    {% if user.is_authenticated %}
-    <div class="dropdown">
-      <a class="btn" onclick="dropdown()">{{ user.get_username }} <img style="max-width: 10%;"
-          src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy"><i
-          style="margin-left: 1%" class="fas fa-sort-down"></i></a>
-      <div id="myDropdown" class="dropdown-content">
-        {% if user_type == "Student" %}
-        <a href="{% url 'student_dash' %}">My profile</a>
-        {% else %}
-        <a href="{% url 'teacher_dash' %}">My profile</a>
-        {%endif%}
-        <hr class="hr-line">
-        <a href="{% url 'logout' %}">Logout</a>
-      </div>
-    </div>
+  <nav class="navbar navbar-expand-md navbar-dark nav  ">
+    <div class="container-fluid">
+    <a class="navbar-brand d-flex flex-inline" href="{% url 'landing' %}">
+        <img class="brand-img" src="https://icon-library.com/images/icon-programing/icon-programing-12.jpg"
+            width="30" height="30" class="d-inline-block align-top" alt="">
+        <p class="d-flex m-0 ml-2 logo-text">ProggaMera</p>
+    </a>
+  </div>
+      <ul class="container-fluid w-50 nav navbar-nav d-flex justify-content-around align-items-center">
+        <li class="nav-item"><a href="#produkt">Produkt</a></li>
+        <li class="nav-item"><a href="#kurser">Kurser</a></li>
+        <li class="nav-item"><a href="pricing">Pris</a></li>
+        
+      </ul>
+  
+    <!-- Right elements -->
+    <div class="container-fluid d-flex justify-content-end ">
+        <div class="d-flex align-items-center">
+            <!-- Notifications -->
+            {% if user.is_authenticated %}
+            <p class="user-text mb-0 mr-2">{{user.username.title}}</p>
+            <!-- <div class="dropdown">
+                <a class="text-reset me-3 dropdown-toggle hidden-arrow" href="#" id="navbarDropdownMenuLink"
+                    role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge rounded-pill badge-notification bg-success">1</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                        <a class="dropdown-item" href="#">The important thing</a>
+                    </li>
+                </ul>
+            </div> -->
+            <!-- Avatar -->
+  
+            
+            <div class="dropdown">
+                <a class="dropdown-toggle d-flex align-items-center hidden-arrow" style="color:white;" href="#" id="dropdownMenuLinkAvatar"
+                    role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img width="30px" src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" style="left:auto; right:0;" aria-labelledby="dropdownMenuLinkAvatar">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'student_dash' %}">My profile</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <div class="register-buttons">
+              <a class="login" href="{% url 'login' %}"> Log In</a>
+              <a href="{% url 'register' %}" class="register-btn">Registrera dig</a>
+            </div>
 
-    {% else %}
-    <div class="register-buttons">
-      <a class="login" href="{% url 'login' %}"> Log In</a>
-      <a href="{% url 'register' %}" class="register-btn">Registrera dig</a>
+            {%endif%}
+        </div>
     </div>
-
-    {%endif%}
-
   </nav>
 
 
   {% block content%}
-  <div class="content">
-    <h1>Landing page</h1>
-  {% if user.is_authenticated %}
-  <p>Welcome {{user.username.title}}</p>
-  {% else %}
-  <p>Welcome, please login</p>
-  {% endif %}
-  {% if no_role == True %}
-  <h1>Du måste välja roll innan du kan komma åt dina sidor</h1>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Välj roll
-  </button>
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Är du lärare eller elev?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Välj om du är elev eller lärare för att komma åt rätt sidor.
+<div id='stars'></div>
+<div id='stars2'></div>
+<div id='stars3'></div>
+{% if no_role == True %}
+    <h1>Du måste välja roll innan du kan komma åt dina sidor</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Välj roll
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Är du lärare eller elev?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Välj om du är elev eller lärare för att komma åt rätt sidor.
 
-        </div>
+          </div>
 
-        <div class="modal-footer justify-content-center">
-          <button type="button" class="btn btn-secondary"><a style="text-decoration: none; color:white"
-              href="{% url 'student_dash' %}"> Elev</a></button>
-          <button type="button" class="btn btn-primary"> <a style="text-decoration: none; color:white"
-              href="{% url 'teacher_dash' %}"> Lärare</a></button>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary"><a style="text-decoration: none; color:white"
+                href="{% url 'student_dash' %}"> Elev</a></button>
+            <button type="button" class="btn btn-primary"> <a style="text-decoration: none; color:white"
+                href="{% url 'teacher_dash' %}"> Lärare</a></button>
 
+          </div>
         </div>
       </div>
     </div>
+    {%endif%}
+<div class="banner py-5">
+  <div class="content py-5">
+    <div class="container d-flex">
+      <div class="d-flex flex-column py-5 pl-4 banner-text pr-5 ">
+        <h1 class="logo-text mb-2 pb-2"><b>Komplett läroplattform för programmering</b></h1>
+        <p class=" pt-3 w-75">Gör programmeringskursen lätt för både elev och lärare genom interaktivt lärande, självrättande test och quiz. 
+          Vi erbjuder ett komplett paket för lärare att klara av skolverketes programmeringskurser på bästa sätt.</p>
+            <div class="register-btn w-25 mt-3 pl-0 pr-0">Börja nu<i class="fas fa-arrow-right pl-3 pr-0"></i></div>
+          
+        </div>
+      <div class="">
+        <img class="img_ai" src="{% static 'main/ai.png' %}" alt="ai face" width="420px">
+      </div>
   </div>
-  {%endif%}
-  {% endblock%}
+  <div class="d-flex justify-content-center py-4">
+    <h6 class="pr-3"><i class="fa-solid fa-graduation-cap pr-3"></i><b>35 359+ </b>Elever lär sig just nu </h6>
+    <h6 class="pl-5"><i class="fa-solid fa-mug-saucer pr-2"></i><b>1232+ </b>Lärare använder ProggaMera </h6>
   </div>
+</div>
+<div class="produkt py-5" id="produkt">
+  <div class="container backboard py-4 pl-3">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex flex-column p-3 pl-5">
+        <div class="rectangle mb-3"></div>
+        <h5 class="">Vad är ProggaMera?</h5>
+      </div>
+      <p class="w-50 produkt-text pr-5">ProggaMera är verktyget för alla lärare som lär ut programmering. Med hjälp av vår hemsida får du allt du behöver. Ett digitalt läromedel med videos och text. Test och quiz för varje kapitel. Samt självrättande programmeringsuppgifter så att du enkelt kan se hur dina elever ligger till.</p>
+    </div>
+    <div class="d-flex  justify-content-between mt-5 py-4">
+        <div class="d-flex w-50"><h3 class="logo-text mb-2 pb-2 pl-5 "><b>Ett verktyg som gynnar både elev och lärare</b></h3></div>
+        <div class="d-flex align-items-center border p-2 mr-3" href="#courses"><p class="m-0">Utforska våra kurser</p> <i class="fas fa-arrow-right pl-3 pr-0"></i></div>
+    </div>
+    <div class="d-flex justify-content-between mt-5 pl-5">
+      <div class="d-flex flex-column pr-3">
+        <div class="rectangle mb-3"></div>
+        <h5 class="">Läromedel</h5>
+        <p class="pr-5 produkt-text py-2">ProggaMera är ett komplett läromedel med video och text för varje kurs. Varje kapitel innehåller en videogenomgång och kortfattad tydlig text. </p>
+      </div>
+      <div class="d-flex flex-column pr-3 ml-5">
+        <div class="rectangle mb-3"></div>
+        <h5 class="">Quiz och test</h5>
+        <p class="pr-5 produkt-text py-2">Vi erbjuder quiz och test som följer varje kurs och kapitel. Genom självrättande test och quiz slipper du massvis med admin arbete och kan fokusera på att lära ut istället.</p>
+      </div>
+      <div class="d-flex flex-column pr-3 ml-5">
+        <div class="rectangle mb-3"></div>
+        <h5 class="">Följ elevers utveckling</h5>
+        <p class="pr-5 produkt-text py-2">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stegen" style="opacity:95%;">
+  <div class="pt-5 pl-5 pr-5  mt-4">
+    <div class="d-flex">
+      <div class="d-flex flex-column w-50 pr-5">
+        <div><h3 class="logo-text pl-5 "><b>Ett verktyg som gynnar både elev och lärare</b></h3></div>
+        <div><img src="{% static 'main/rocket.png' %}" alt=""></div>
+      </div>
+      <div class="d-flex flex-column pl-3 titles">
+        <div class="d-flex">
+          <div class="pb-4 w-50">
+            <div class="rectangle mb-3"></div>
+            <h6 class="" style="color:white">1. Skapa konto</h5>
+          </div>
+          <div class="pl-5 d-flex ">
+            <p class="pr-5 produkt-text py-3 ">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="pb-4 w-50">
+            <div class="rectangle mb-3"></div>
+            <h6 class="" style="color:white">2. Skapa ett klassrum</h5>
+          </div>
+          <div class="pl-5">
+            <p class="pr-5 produkt-text py-3">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="pb-4 w-50">
+            <div class="rectangle mb-3"></div>
+            <h6 class="" style="color:white">3. Lägg till relevanta kurser</h5>
+            
+          </div>
+          <div class="pl-5">
+            <p class="pr-5 produkt-text py-3">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="pb-4 w-50">
+            <div class="rectangle mb-3"></div>
+            <h6 class="" style="color:white">4. Lägg till dina elever</h5>
+            
+          </div>
+          <div class="pl-5">
+            <p class="pr-5 produkt-text py-3">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="pb-4 w-50">
+            <div class="rectangle mb-3"></div>
+            <h6 class="" style="color:white">5. Ge läxor och välj vad eleverna ska lära sig</h5>
+            
+          </div>
+          <div class="pl-5">
+            <p class="pr-5 produkt-text py-3">Via vår detaljerade översiktsvy kan du följa hur eleverna ligger till, om de gjort läxan och vilket betyg de fick på sina uppgifter och quiz. </p>
+          </div>
+        </div>
+        
+      </div>
+      
+        
+       
+    </div>
+  </div>
+</div>
+
+<div class="calltoaction ml-5 mr-5 mt-4">
+  <div class="big-rectangle m-3 ml-5 mr-5 p-3">
+    <div class="d-flex justify-content-between align-items-center pl-4">
+      <div clasS="d-flex flex-column">
+        <div><p class="m-0 pb-0 pt-0 small">Gör något bra för dig och dina elever</p></div>
+        <div class="pb-2" ><h4><b>Registrera dig och börja lära ut programmering bättre redan nu</b></h4></div>
+      </div>
+      <div>
+        <div class="blackbutton">Börja nu</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="kurser mt-5 py-5" id="kurser">
+  <div class="d-flex mt-3  justify-content-center flex-column align-items-center">
+    <h3 class="logo-text pl-5 pb-3"><b>Våra kurser</b></h3>
+    <div class="circle mb-3 my-3 ml-5"></div>
+    <div class="circle mb-3 ml-5"></div>
+    <div class="circle mb-3 ml-5"></div>
+  </div>
+  <div class="d-flex py-5 pl-5  justify-content-around">
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Webbutveckling 1</h5>
+        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
+        <ul class="pl-3 pb-3">
+          <li>12 kapitel</li>
+          <li>Instruktionsfilm för varje kapitel</li> 
+          <li> Quiz och Uppgifter</li>
+        </ul>
+          
+        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+      </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Webbutveckling 1</h5>
+        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
+        <ul class="pl-3 pb-3">
+          <li>12 kapitel</li>
+          <li>Instruktionsfilm för varje kapitel</li> 
+          <li> Quiz och Uppgifter</li>
+        </ul>
+          
+        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+      </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Webbutveckling 1</h5>
+        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
+        <ul class="pl-3 pb-3">
+          <li>12 kapitel</li>
+          <li>Instruktionsfilm för varje kapitel</li> 
+          <li> Quiz och Uppgifter</li>
+        </ul>
+          
+        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    {% endblock%}
+
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

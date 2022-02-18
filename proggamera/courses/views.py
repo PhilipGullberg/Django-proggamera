@@ -32,7 +32,12 @@ def subchapter(request,courseid,chapterid, pageid):
     
     pageid = request.GET.get('page')
     page_obj=p.get_page(pageid)
-    curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(int(pageid)-1))
+    if(pageid):
+        curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(int(pageid)-1))
+    else:
+        curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(1))
+    
+    
     curr_quiz=Quiz.objects.filter(parent=curr_subchapter)
     if request.method == 'POST':
         answer_dic=list(request.POST.items())

@@ -10,6 +10,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/dcd3bbc21c.js" crossorigin="anonymous"></script>
+    <link rel="ICON" href="https://icon-library.com/images/icon-programing/icon-programing-12.jpg" type="image/ico" />
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -18,7 +20,7 @@
 </head>
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <nav class="navbar navbar-expand-md navbar-dark nav ">
+    <nav class="navbar navbar-expand-md navbar-dark nav py-1 ">
         <a class="navbar-brand d-flex flex-inline" href="{% url 'landing' %}">
             <img class="brand-img" src="https://icon-library.com/images/icon-programing/icon-programing-12.jpg"
                 width="30" height="30" class="d-inline-block align-top" alt="">
@@ -44,8 +46,8 @@
                 <div class="dropdown">
                     <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="dropdownMenuLinkAvatar"
                         role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                            alt="Black and White Portrait of a Man" loading="lazy" />
+                        <img width="30px" src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy">
+                           
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" style="left:auto; right:0;" aria-labelledby="dropdownMenuLinkAvatar">
                         <li>

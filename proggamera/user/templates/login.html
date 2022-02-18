@@ -6,8 +6,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'user/style.css' %}">
 {%endblock%}
 {% block content%}
-<div class="d-flex justify-content-center login-container ">
-    <div class="bg-light w-30 py-3 px-5 rounded">
+<div class="d-flex justify-content-center login-container py-5 ">
+    <div class="bg-light w-30 py-3 px-5 my-5 rounded">
         <h1>Logga in</h1>
         <form method="POST">
         {% csrf_token %}

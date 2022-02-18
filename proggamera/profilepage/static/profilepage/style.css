@@ -2,6 +2,7 @@
     background-color: #1C0230;
     position: fixed !important;
     width: 100%;
+    z-index:100;
 }
 
 .brand-img{
@@ -24,12 +25,12 @@
     z-index: 1;
     top: 0;
     background: #2f323a;
-    margin-top: 56px;
+    margin-top: 36px;
     padding-top: 30px;
     position: fixed;
     left: 0;
-    width: 220px;
-    height: calc(100% - 7%);
+    width: 200px;
+    height: calc(100% - 5%);
 
   }
   
@@ -75,7 +76,7 @@
   /* Content*/
   .content{
     margin-left: 250px;
-    padding-top:70px;
+    padding-top:50px;
     background: url(background.png) no-repeat;
     background-position: center;
     background-size: cover;
