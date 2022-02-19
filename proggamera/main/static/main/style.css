@@ -227,8 +227,8 @@ box-shadow: 1994px 1692px #FFF , 961px 1928px #FFF , 819px 1320px #FFF , 1899px 
     font-size: 18px;
 }
 .circle{
-    width:10px;
-    height:10px;
+    width:6px;
+    height:6px;
     border-radius: 50px; 
     background-color: #E4B3FF;
 }

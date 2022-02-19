@@ -62,21 +62,29 @@
         </div>
     </nav>
     <!--Sidebar-->
-    {% block sidebar %}
+   
     <div class="sidebar">
         <div class="profile_info">
             <!---->
           <img src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy" class="profile_image" alt="">
           <h4>{{user.get_username.title}}</h4>
         </div>
+        {% if user.is_teacher %}
+            <a href="{%url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
+            <a href="{%url 't_classroom' %}"><i class="fas fa-cogs"></i><span>Klassrum</span></a>
+            <a href="#"><i class="fas fa-table"></i><span>Kurser</span></a>
+            <a href="{%url 't_results' %}"><i class="fas fa-th"></i><span>Resultat</span></a>
+            <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
+            <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
+        {%else%}
+            <a href="{%url 'student_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
+            <a href="{% url 's_classroom'%}"><i class="fas fa-cogs"></i><span>Klassrum</span></a>
+            <a href="{% url 's_courses'%}"><i class="fas fa-table"></i><span>Kurser</span></a>
+            <a href="#"><i class="fas fa-th"></i><span>Resultat</span></a>
+            <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
+            <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
+        {%endif%}
         
-        <a href="#"><i class="fas fa-desktop"></i><span>Översikt</span></a>
-        <a href="#"><i class="fas fa-cogs"></i><span>Klassrum</span></a>
-        <a href="#"><i class="fas fa-table"></i><span>Kurser</span></a>
-        <a href="#"><i class="fas fa-th"></i><span>Resultat</span></a>
-        <a href="#"><i class="fas fa-info-circle"></i><span>About</span></a>
-        <a href="#"><i class="fas fa-cog  "></i><span>Settings</span></a>
-        {% endblock %}
       </div>
       <div class="content">
         {% block content %}

@@ -133,3 +133,20 @@
     padding:2%;
     margin-top:1%;
 }
+/* result-page*/
+.classroom{
+  background-color: #1C0230;
+  color:White;
+}
+.result_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom:2%;
+}
+
+.result_table td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}

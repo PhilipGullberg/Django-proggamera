@@ -1,0 +1,64 @@
+{% extends 'profile_layout.html' %}
+
+{% block content%}
+<h1 class="py-2">Resultat</h1>
+
+<div class="resultpage py-3">
+    {% for classroom in classrooms%}
+    <div class="classroom p-4 mb-3 mr-5 rounded">
+        {% for course in classroom.courses.all%}
+            {% for student in classroom.students.all %}
+                {% if student.quizresult_set.all%}
+                
+                {% if forloop.parentloop.first %}
+                    <h3 class="pb-2">Klass: {{classroom}}</h3>
+                {%endif%}
+                <h5 class="pb-1">{{course}}</h5> 
+                <table class="result_table">
+                    <tr>
+                        <th>Elev</th>
+                        <th>Delkapitel</th>
+                        <th>Quiz</th>
+                        <th>Svarat</th>
+                        <th>Rätt svar</th>
+                        <th>Resultat</th>
+                    </tr>
+                    
+                            {% for result in student.quizresult_set.all %}
+                          
+                                {% if result.quiz.parent.parent_chapter.course == course%}
+                                <tr>
+                                <td>{{student}}</td>
+                                <td>{{result.quiz.parent}}</td>
+                                <td>{{result.quiz}}</td>
+                                <td>{{result.answers}}</td>
+                                <td>{{result.quiz.ans}}</td>
+                                <td>{{result.result}}</td>
+                                </tr>
+                                {%endif%}
+                            {%endfor%}
+                            
+                        
+                    
+                    
+                </table>
+                {%endif%}
+            {%endfor%}
+        {%endfor%}
+    </div>
+    {%endfor%}
+   
+</div>
+<script>
+    let elements = document.getElementsByClassName('classroom');
+    for(let item of elements){
+        if (item.innerText == "") {
+            item.remove();
+            console.log("empty")
+        }
+    }
+    
+</script>
+{%endblock%}
+
+
