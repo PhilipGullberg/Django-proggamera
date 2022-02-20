@@ -1,4 +1,4 @@
-.nav{
+.navigation{
     background-color: #1C0230;
     position: fixed !important;
     width: 100%;
@@ -149,4 +149,18 @@
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+
+/*dashboard */
+.topbanner{
+  background-color: #6d16af;
+  color:white;
+  width: 60% !important;
+}
+.text{
+  font-size: 14px;
+}
+.classcard{
+  background-color: #6d16af !important;
+  color:white;
 }

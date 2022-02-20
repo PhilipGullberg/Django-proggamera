@@ -20,7 +20,7 @@
 </head>
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <nav class="navbar navbar-expand-md navbar-dark nav py-1 ">
+    <nav class="navbar navbar-expand-md navbar-dark navigation py-1 ">
         <a class="navbar-brand d-flex flex-inline" href="{% url 'landing' %}">
             <img class="brand-img" src="https://icon-library.com/images/icon-programing/icon-programing-12.jpg"
                 width="30" height="30" class="d-inline-block align-top" alt="">
@@ -73,7 +73,7 @@
             <a href="{%url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
             <a href="{%url 't_classroom' %}"><i class="fas fa-cogs"></i><span>Klassrum</span></a>
             <a href="#"><i class="fas fa-table"></i><span>Kurser</span></a>
-            <a href="{%url 't_results' %}"><i class="fas fa-th"></i><span>Resultat</span></a>
+            <a href="{%url 't_results' %}"><i class="fas fa-th"></i><span>Uppföljning</span></a>
             <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
             <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
         {%else%}

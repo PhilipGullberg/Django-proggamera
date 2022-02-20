@@ -11,16 +11,13 @@ from django.template.loader import render_to_string
 
 
 def teacherdash(request):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    teachers_classrooms=Classroom.objects.filter(teacher=curr_teacher)
     if request.user.is_authenticated:
         if request.user.is_teacher :
-            return render(request,'teacherdash.html')
-        else:
-            user=CustomUser.objects.get(username=request.user.username)
-            user.is_teacher=True
-            user.save()
-            
-            return render(request,'teacherdash.html')
+            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms})
 
+            
 def studentdash(request):
     if request.user.is_authenticated:
         if request.user.is_student :
