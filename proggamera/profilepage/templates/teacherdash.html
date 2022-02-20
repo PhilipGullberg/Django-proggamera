@@ -40,13 +40,18 @@
   <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class">+ Ny klass</a> </div>
   <div class="d-flex flex-wrap ">
   {% for class in classrooms%}
-      <div class="card classcard w-25 mr-2 mt-2">
+      <div class="card classcard w-25 mr-3 mt-2">
         <div class="card-header">
           {{class}}
         </div>
         <div class="card-body">
-          <h5 class="card-title">{{class.course}}</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <h5 class="card-title">Kurser:</h5>
+          {% for course in class.courses.all %}
+          
+          <p>{{course}}</p>
+          {%endfor%}
+          <p class="card-text">Antal elever: {{class.students.all|length}}</p>
+
           <a href="#" class="stnd-btn ">Till kursen </a>
         </div>
       </div>

@@ -156,6 +156,7 @@
   background-color: #6d16af;
   color:white;
   width: 60% !important;
+  filter: drop-shadow(0 0 0.75rem black);
 }
 .text{
   font-size: 14px;
@@ -163,4 +164,6 @@
 .classcard{
   background-color: #6d16af !important;
   color:white;
+  
+  filter: drop-shadow(0 0 0.5rem black);
 }
