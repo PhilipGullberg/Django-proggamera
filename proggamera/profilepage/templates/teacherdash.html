@@ -1,19 +1,6 @@
 {% extends 'profile_layout.html' %}
 
-{% block sidebar %}
-<div class="sidebar">
-        <div class="profile_info">
-            <!---->
-          <img src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy" class="profile_image" alt="">
-          <h4>{{user.get_username.title}}</h4>
-        </div>
-        <a href="{% url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
-        <a href="#"><i class="fas fa-cogs"></i><span>Kurser</span></a>
-        <a href="{% url 't_classroom' %}"><i class="fas fa-table"></i><span>Klassrum</span></a>
-        <a href="{% url 't_results' %}"><i class="fas fa-th"></i><span>Resultat</span></a>
-        <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
-        <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
-{% endblock %}
+
 {% block content %}
 {%load static%}
 <div class="container topbanner ml-0 mt-4 p-3 rounded">
@@ -30,7 +17,7 @@
         <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;" href="{% url 't_classroom' %}">Gå till klassrum</a> </div>
       </div>
     </div>
-    <div class="pr-5"><img src="{% static 'profilepage/standing.png'%}" alt=""></div>
+    <div class="pr-5"><img src="{% static 'profilepage/standing.png'%}" loading="lazy" alt=""></div>
   </div>
 </div>
 
@@ -47,10 +34,9 @@
         <div class="card-body">
           <h5 class="card-title">Kurser:</h5>
           {% for course in class.courses.all %}
-          
-          <p>{{course}}</p>
+          <p class="mb-0">{{course}}</p>
           {%endfor%}
-          <p class="card-text">Antal elever: {{class.students.all|length}}</p>
+          <p class="card-text mt-1">Antal elever: {{class.students.all|length}}</p>
 
           <a href="#" class="stnd-btn ">Till kursen </a>
         </div>
