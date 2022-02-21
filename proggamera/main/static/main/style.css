@@ -42,6 +42,17 @@ nav{
 .img_ai{
     z-index: 100;
     opacity:95%;
+    animation: fadein ease 1s;
+}
+@keyframes fadein {
+    0%{
+        opacity:0%;
+        transform: scale(0%);
+    }
+    100%{
+        opacity:95%;
+        transform: scale(100%);
+    }
 }
 .logo-text{
     background: -webkit-linear-gradient(180deg, #FFAB08, #B973DE);
@@ -60,6 +71,15 @@ nav{
     position: fixed !important;
     width: 100%;
     z-index:1000;
+    animation: pull-down 1s ease-in-out;
+}
+@keyframes pull-down {
+    from{
+        transform: translateY(-100%);
+    }
+    to{
+        transform: translateY(0%);
+    }
 }
 .register-buttons{
     color:white;
@@ -120,6 +140,16 @@ nav{
 }
 .banner-text{
     text-align: left;
+    animation:fadein ease 1s, left-to-right-scale 0.8s;
+}
+@keyframes left-to-right-scale {
+    0%{
+        transform: translateX(-50%);
+    }
+    100%{
+       transform: translateX(0%);
+       
+    }
 }
 
   
@@ -227,8 +257,8 @@ box-shadow: 1994px 1692px #FFF , 961px 1928px #FFF , 819px 1320px #FFF , 1899px 
     font-size: 18px;
 }
 .circle{
-    width:10px;
-    height:10px;
+    width:6px;
+    height:6px;
     border-radius: 50px; 
     background-color: #E4B3FF;
 }

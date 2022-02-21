@@ -6,22 +6,18 @@ from .forms import *
 from .models import *
 from user.models import *
 from django.shortcuts import redirect
-from invitations.utils import get_invitation_model
 from django.template.loader import render_to_string
 # Create your views here.
 
 
 def teacherdash(request):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    teachers_classrooms=Classroom.objects.filter(teacher=curr_teacher)
     if request.user.is_authenticated:
         if request.user.is_teacher :
-            return render(request,'teacherdash.html')
-        else:
-            user=CustomUser.objects.get(username=request.user.username)
-            user.is_teacher=True
-            user.save()
-            
-            return render(request,'teacherdash.html')
+            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms})
 
+            
 def studentdash(request):
     if request.user.is_authenticated:
         if request.user.is_student :
@@ -84,6 +80,7 @@ def s_classroom(request):
 def s_courses(request):
     curr_user=Student.objects.get(user=request.user)
     courses=Course.objects.filter(student=curr_user)
+    
     return render(request, 'student_courses.html',{"courses":courses})
 
 def curr_classroom(request, pk):
@@ -154,7 +151,13 @@ def added(request, pk, student):
     class_courses=Course.objects.filter(classroom__name=curr_classroom)
     for course in class_courses:
         curr_student.courses.add(course)
-    print(class_courses)
-    print(curr_classroom, curr_student)
     message= f"Lade till {curr_student}"
     return render(request, 'add_student.html',{'classroom':curr_classroom, "message":message})
+
+def t_results(request):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    teachers_classrooms=Classroom.objects.filter(teacher=curr_teacher)
+    classroom_courses=Course.objects.filter(classroom__teacher=curr_teacher)
+    teachers_students=Student.objects.filter(classroom__teacher=curr_teacher)
+
+    return render(request, 'teacher_results.html',{'students':teachers_students,'classrooms':teachers_classrooms, 'courses':classroom_courses})

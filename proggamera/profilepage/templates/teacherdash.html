@@ -1,20 +1,50 @@
 {% extends 'profile_layout.html' %}
 
-{% block sidebar %}
-<div class="sidebar">
-        <div class="profile_info">
-            <!---->
-          <img src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy" class="profile_image" alt="">
-          <h4>{{user.get_username.title}}</h4>
-        </div>
-        <a href="{% url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
-        <a href="#"><i class="fas fa-cogs"></i><span>Kurser</span></a>
-        <a href="{% url 't_classroom' %}"><i class="fas fa-table"></i><span>Klassrum</span></a>
-        <a href="#"><i class="fas fa-th"></i><span>Resultat</span></a>
-        <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
-        <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
-{% endblock %}
+
 {% block content %}
-<h1>Teacher Dash</h1>
-<div class="stnd-btn"><a style="text-decoration: none; color:white;" href="{% url 't_classroom' %}">Skapa nytt klassrum</a> </div>
+{%load static%}
+<div class="container topbanner ml-0 mt-4 p-3 rounded">
+  <div class="d-flex justify-content-between ">
+    <div class="d-flex flex-column w-50 pl-4 pt-1">
+      <div>
+        <h1>Läraröversikt</h1>
+      </div>
+      <div>
+        <p class="text pb-3 pt-2">Hej Lärare! Dina elever jobbar på hårt i dina kurser! Här kan du se en överblick över hur det går för dina elever, samt
+        hoppa mellan de olika delarna av att bedriva dina kurser! Ha en bra dag, och progga mera!</p>
+      </div>
+      <div class="mb-2">
+        <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;" href="{% url 't_classroom' %}">Gå till klassrum</a> </div>
+      </div>
+    </div>
+    <div class="pr-5"><img src="{% static 'profilepage/standing.png'%}" loading="lazy" alt=""></div>
+  </div>
+</div>
+
+<div class="container ml-2 mt-4 w-75">
+  <h2>Dina klassrum</h2>
+  <hr class="w-75 ml-0">
+  <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class">+ Ny klass</a> </div>
+  <div class="d-flex flex-wrap ">
+  {% for class in classrooms%}
+      <div class="card classcard w-25 mr-3 mt-2">
+        <div class="card-header">
+          {{class}}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">Kurser:</h5>
+          {% for course in class.courses.all %}
+          <p class="mb-0">{{course}}</p>
+          {%endfor%}
+          <p class="card-text mt-1">Antal elever: {{class.students.all|length}}</p>
+
+          <a href="#" class="stnd-btn ">Till kursen </a>
+        </div>
+      </div>
+  {%endfor%}
+  </div>
+  
+</div>
+
+
 {% endblock%}
