@@ -62,9 +62,15 @@
                     <img width="30px" src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" style="left:auto; right:0;" aria-labelledby="dropdownMenuLinkAvatar">
+                  {% if user.is_teacher%}
                     <li>
-                        <a class="dropdown-item" href="{% url 'student_dash' %}">My profile</a>
+                        <a class="dropdown-item" href="{% url 'teacher_dash' %}">My profile</a>
                     </li>
+                  {% else %}
+                    <li>
+                      <a class="dropdown-item" href="{% url 'student_dash' %}">My profile</a>
+                    </li>
+                  {%endif%}
                     <li>
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                     </li>
@@ -251,10 +257,10 @@
 
 <div class="kurser mt-5 py-5" id="kurser">
   <div class="d-flex mt-3  justify-content-center flex-column align-items-center">
-    <h3 class="logo-text pl-5 pb-3"><b>Våra kurser</b></h3>
-    <div class="circle mb-3 my-3 ml-5"></div>
-    <div class="circle mb-3 ml-5"></div>
-    <div class="circle mb-3 ml-5"></div>
+    <h3 class="logo-text pl-5 pb-1"><b>Våra kurser</b></h3>
+    <div class="circle mb-1 my-2 ml-5"></div>
+    <div class="circle mb-2 ml-5"></div>
+    <div class="circle mb-1 ml-5"></div>
   </div>
   <div class="d-flex py-5 pl-5  justify-content-around">
     <div class="card" style="width: 18rem;">

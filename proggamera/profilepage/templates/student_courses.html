@@ -2,9 +2,15 @@
 
 {% block content%}
 <h3>Här är dina kurser</h3>
+<hr>
 {% for course in courses%}
-    {{course}}
-    <div class="stnd-btn" type="button"><a href="{% url 'subchapter' course.id 1 1 %}?page=1" style="text-decoration: none; color:white;">
-         Gå till kurs  </a><i class="fas fa-arrow-right"></i></div>
+    <div class="d-flex align-items-center">
+    <h4 class="py-2 px-3">{{course}}</h4>
+    <div>
+        <div class="stnd-btn " type="button"><a href="{% url 'subchapter' course.id 1 1 %}?page=1" style="text-decoration: none; color:white;">
+            Gå till kurs  </a><i class="fas fa-arrow-right"></i></div>
+        </div>
+    </div>
+    <br>
 {%endfor%}
 {%endblock%}

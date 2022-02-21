@@ -1,4 +1,4 @@
-.nav{
+.navigation{
     background-color: #1C0230;
     position: fixed !important;
     width: 100%;
@@ -132,4 +132,38 @@
     border-radius: 5px;
     padding:2%;
     margin-top:1%;
+}
+/* result-page*/
+.classroom{
+  background-color: #1C0230;
+  color:White;
+}
+.result_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom:2%;
+}
+
+.result_table td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+/*dashboard */
+.topbanner{
+  background-color: #6d16af;
+  color:white;
+  width: 60% !important;
+  filter: drop-shadow(0 0 0.75rem black);
+}
+.text{
+  font-size: 14px;
+}
+.classcard{
+  background-color: #6d16af !important;
+  color:white;
+  
+  filter: drop-shadow(0 0 0.5rem black);
 }
