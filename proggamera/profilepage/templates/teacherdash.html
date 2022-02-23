@@ -1,8 +1,10 @@
 {% extends 'profile_layout.html' %}
 
+
 {% block extrahead %}
 <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 {%endblock%}
+
 {% block content %}
 {%load static%}
 <div class="pt-2 pl-2 pb-0 mb-0">
@@ -48,6 +50,7 @@
               {%endfor%}
               <p class="card-text">Antal elever: {{class.students.all|length}}</p>
             </div>
+
 
             <div class="">
               <a href="#" class="stnd-btn ">Till kursen </a>
