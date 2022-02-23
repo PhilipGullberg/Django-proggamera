@@ -134,6 +134,7 @@ nav{
 .content{
     color:white;
     text-align: center;
+    min-height: 100vh;
 }
 .banner{
     z-index:100;

@@ -13,9 +13,14 @@ from django.template.loader import render_to_string
 def teacherdash(request):
     curr_teacher=Teacher.objects.get(user=request.user)
     teachers_classrooms=Classroom.objects.filter(teacher=curr_teacher)
+    teachers_courses=Course.objects.filter(classroom__teacher=curr_teacher)
+    courses=[]
+    for course in teachers_courses:
+        if course not in courses:
+            courses.append(course)
     if request.user.is_authenticated:
         if request.user.is_teacher :
-            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms})
+            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms,'courses':courses})
 
             
 def studentdash(request):
