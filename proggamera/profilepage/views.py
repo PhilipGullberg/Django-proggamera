@@ -3,7 +3,7 @@ from msilib.schema import Class
 from multiprocessing import context
 from django.shortcuts import render
 from .forms import *
-from .models import *
+from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
