@@ -30,7 +30,7 @@ class Student(models.Model):
     user=models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     courses=models.ManyToManyField(Course, blank=True)
-    license_active=models.BooleanField()
+    license_active=models.BooleanField(null=True ,blank=True)
     def __str__(self):
         return self.user.username
 

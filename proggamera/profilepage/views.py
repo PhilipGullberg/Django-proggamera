@@ -1,3 +1,4 @@
+from email import message
 from http.client import HTTPResponse
 from msilib.schema import Class
 from multiprocessing import context
@@ -7,6 +8,7 @@ from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.contrib import messages
 # Create your views here.
 
 
@@ -112,15 +114,50 @@ def add_students(request, pk):
     else:
         form=add_student_form()
         student=""
-        print(form)
     
     return render(request, 'add_student.html',{"added_students":student,"form":form, "classroom":curr_classroom})
+
+def add_students_code(request, classroomid):
+    class_path="127.0.0.1:8000/profilepage/student/classroom/add/"+str(classroomid)
+    courses=Course.objects.filter(classroom__id=classroomid)
+    students=Student.objects.filter(classroom__id=classroomid)
+    curr_classroom=Classroom.objects.get(id=classroomid)
+    context={'classroom':curr_classroom, 'courses':courses,'students':students,'code':class_path}
+    return render(request, 'classroom.html',context)
+
+def add_student_to_classroom(request,pk):
+    try:
+        curr_student=Student.objects.get(user=request.user)
+        classroom=Classroom.objects.get(id=pk)
+        try: 
+            classroom.students.get(user=request.user)
+            messages.info(request,'Du är redan i klassrummet', extra_tags="added_classroom")
+            classes=Classroom.objects.filter(students=curr_student)
+        except curr_student.DoesNotExist:
+            print("hello?")
+            classroom.students.add(curr_student)
+            classroom.save()
+            try: 
+                classes=Classroom.objects.filter(students=curr_student)
+                messages.info(request, 'Du blev tillagd i klassrummet', extra_tags="added_classroom")
+            except Classroom.DoesNotExist:
+                classes=[]
+                messages.info(request, 'Klassrummet fanns inte', extra_tags="added_classroom")  
+
+    except Classroom.DoesNotExist:
+        messages.info(request, 'Klassrummet fanns inte', extra_tags="added_classroom")  
+        try:
+            classes=Classroom.objects.filter(students=curr_student)
+        except Classroom.DoesNotExist:
+            classes=[]
+        
+    
+    return render(request, 'student_classrooms.html',{'classes':classes})
+
 
 def remove_student(request, student, classroom):
     curr_student=Student.objects.get(id=student)
     curr_classroom=Classroom.objects.get(id=classroom)
-    print(curr_student)
-    print(curr_classroom)
     curr_classroom.students.remove(curr_student)
 
     courses=Course.objects.filter(classroom__id=classroom)
