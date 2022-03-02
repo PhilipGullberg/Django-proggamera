@@ -50,9 +50,15 @@
                            
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" style="left:auto; right:0;" aria-labelledby="dropdownMenuLinkAvatar">
-                        <li>
+                        {% if user.is_teacher%}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'teacher_dash' %}">My profile</a>
+                            </li>
+                        {% else %}
+                            <li>
                             <a class="dropdown-item" href="{% url 'student_dash' %}">My profile</a>
-                        </li>
+                            </li>
+                            {%endif%}
                         <li>
                             <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         </li>
@@ -88,7 +94,11 @@
       </div>
     {%endblock%}
       <div class="content">
+        <div class="d-flex justify-content-end pr-5 pt-2  darkmode">
+            <div class="dark-light border rounded d-flex p-1 "><i id="moon" class="fa-solid fa-moon pr-2 "></i><i id="sun" class="fas fa-light fa-sun"></i></div>
+        </div>
         {% block content %}
+        
         {% endblock%}
       </div>
     
@@ -96,11 +106,36 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
   </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
   </script>
+  
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+  <script>
+      let darklight = document.querySelector('.dark-light');
+      darklight.addEventListener('click',darkmode);
+
+      function darkmode(){
+        let content = document.querySelector('.content');
+        console.log(content)
+        if(content.style.backgroundColor=="white"){
+            darklight.classList.remove('bg-dark');
+            content.style.backgroundColor="#242323"
+            content.style.color="white";
+            darklight.style.color="black";
+        }
+        else{
+            darklight.classList.add('bg-dark');
+            darklight.style.backgroundColor="white";
+            content.style.backgroundColor="white";
+            content.style.color="black";
+            darklight.style.color="white";
+        }
+        
+      }
   </script>
    {% block endscripts%}
    {%endblock%}

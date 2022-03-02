@@ -1,3 +1,7 @@
+body{
+  background-color:rgb(36, 35, 35) !important;
+  transition: all 0.5s ease-in-out;
+}
 .navigation{
     background-color: #1C0230;
     position: fixed !important;
@@ -73,14 +77,25 @@
   .sidebar i{
     padding-right: 10px;
   }
+  .darkmode{
+    width:25%;
+    float:right;
+    
+  }
+.dark-light{
+  cursor: pointer;
+  background-color: white;
+  color:black;
+  transition: all 0.5s ease-in-out;
+}
   /* Content*/
   .content{
     margin-left: 250px;
     padding-top:50px;
-    background: url(background.png) no-repeat;
     background-position: center;
     background-size: cover;
     height: 100vh;
+    color:White;
     transition: 0.5s;
   }
   /* standard button */
@@ -135,7 +150,7 @@
 }
 /* result-page*/
 .classroom{
-  background-color: #1C0230;
+  background-color: #900ef3;
   color:White;
 }
 .result_table {
@@ -152,18 +167,37 @@
 }
 
 /*dashboard */
+.content{
+  margin-left:200px;
+  padding-left: 50px;
+  height: 100%;
+  min-height: 100vh;
+}
+hr{
+  border-color: white;
+}
 .topbanner{
   background-color: #6d16af;
   color:white;
-  width: 60% !important;
-  filter: drop-shadow(0 0 0.75rem black);
+  width: 92% !important;
+  filter: drop-shadow(5px 7px 5px rgb(59, 59, 59));
 }
 .text{
   font-size: 14px;
 }
 .classcard{
-  background-color: #6d16af !important;
-  color:white;
-  
-  filter: drop-shadow(0 0 0.5rem black);
+  background-color: #ffffff !important;
+  color:black;
+  filter: drop-shadow(5px 7px 5px rgb(59, 59, 59));
+}
+#calendar{
+  border:1px solid #1C0230;
+  color:black;
+}
+.vl{
+  border-left: 1px solid rgba(255, 255, 255, 0.699);
+  height: 100%;
+}
+.h-line{
+  border-color: rgb(206, 205, 205);
 }
