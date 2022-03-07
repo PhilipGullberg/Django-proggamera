@@ -94,12 +94,18 @@ def curr_classroom(request, pk):
     classroom = Classroom.objects.get(id=pk)
     courses=Course.objects.filter(classroom__id=pk)
     students=Student.objects.filter(classroom__id=pk)
-    """ print("hej")
-    curr = request.POST.get('klassnamn', None) 
-    curr_classroom=Classroom.objects.filter(name=curr)
-    print(curr_classroom)
-    #if request.is_ajax and request.method == "POST": """
-    context={'classroom':classroom, 'courses':courses,'students':students}
+    if request.method == "POST":
+        form = add_course_form(request.POST)
+        if form.is_valid():
+            chosen_courses=form.cleaned_data["courses"]
+            if len(chosen_courses)>1:
+                    for i in range(len(chosen_courses)):
+                        classroom.courses.add(chosen_courses[i])
+            else:
+                classroom.courses.add(chosen_courses[0])
+    else:
+        form=add_course_form()
+    context={'classroom':classroom, 'courses':courses,'students':students,'form':form}
     return render(request,'classroom.html',context)
 
 def add_students(request, pk):

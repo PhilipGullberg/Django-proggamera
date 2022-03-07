@@ -1,7 +1,14 @@
 {% extends 'profile_layout.html' %}
 
 {% block content%}
-
+<script>
+    $(document).ready(function () {
+        $('#add_class_form').hide()
+        $('#add_class').click(function () {
+            $('#add_class_form').show()
+        });
+    });
+</script>
 <div class=" pl-5 pt-3 pb-3  container">
     <div class="stnd-btn" type="button"><a href="{% url 't_classroom' %}" style="text-decoration: none; color:white;">
             <i class="fas fa-arrow-left"></i> Gå tillbaks</a></div>
@@ -15,7 +22,14 @@
             <li>{{course}}</li>
             {%endfor%}
         </ul>
-        <div class="stnd-btn" type="button"><a style="text-decoration: none; color:white;">+ Lägg till kurs</a></div>
+        <div class="stnd-btn" type="button" id="add_class"><a style="text-decoration: none; color:white;">+ Lägg till kurs</a></div>
+        <div id="add_class_form">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Submit">
+            </form>
+        </div>
     </div>
     <div class="students mt-3">
         <h3>Elever:</h3>

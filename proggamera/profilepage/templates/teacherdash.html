@@ -35,7 +35,7 @@
     <div class="container pl-0 mt-4 ">
       <h2>Dina klassrum</h2>
       <hr class="h-line w-75 ml-0">
-      <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class">+ Ny klass</a> </div>
+      <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class" href="{% url 't_classroom' %}">+ Ny klass</a> </div>
       <div class="d-flex flex-wrap ">
         {% for class in classrooms%}
         <div class="card classcard  mr-3 mt-2">
@@ -53,7 +53,7 @@
 
 
             <div class="">
-              <a href="#" class="stnd-btn ">Till kursen </a>
+              <a href="{% url 'curr_classroom' class.id%}" class="stnd-btn ">Till klassen </a>
             </div>
 
           </div>
