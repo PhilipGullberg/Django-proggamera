@@ -8,11 +8,15 @@
 body{
     background-color: #2e2e2e;
   }
+
+.quiz{
+    background-color: purple;
+}
 .sidebar-course{
     padding-top:70px;
     width:300px;
     float:left;
-    background-color: #232323;
+    background-color: #1C0230;
     position: fixed;
     color:white;
     top: 0;
@@ -21,15 +25,40 @@ body{
     transition:2s all;
 }
 .card{
-    background-color: #232323;
+    background-color: #1C0230;
     border-top:1px solid grey;
     border-bottom:1px solid grey;
+}
+.fill-in-the-blank{
+    background-color: purple;
+}
+.special-sign{
+    background-color: #979797;
+    padding: 1%;
+    border-radius: 8%;
+    color:#1C0230;
+}
+.fill-in-part{
+    background-color: #272822;
+    letter-spacing: 2px;
+
+}
+
+.input-field{
+    padding:0;
+    height:100%;
+    width:25%;
+    align-self:center;
+
+}
+.code-text{
+    padding-left:1%;
 }
 .card-body{
     padding-top:0px;
 }
 .sub-text{
-    background-color: #232323;
+    background-color: #1C0230;
     border-bottom:1px solid grey;
     padding-bottom: 0;
 }
@@ -54,7 +83,7 @@ hr{
 }
 /*Footer css*/
 .footer{
-    background-color: #232323;
+    background-color: #1C0230;
     z-index: 10000000000;
     color:white;
     height:7vh;
@@ -95,7 +124,6 @@ h5{
 /* content */
 .content{
     padding-left:15%;
-    padding-right:5%;
     line-height: 30px;
     font-size:14px;
     

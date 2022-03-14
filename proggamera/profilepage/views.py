@@ -87,6 +87,7 @@ def s_classroom(request):
 def s_courses(request):
     curr_user=Student.objects.get(user=request.user)
     courses=Course.objects.filter(student=curr_user)
+    print(courses)
     
     return render(request, 'student_courses.html',{"courses":courses})
 

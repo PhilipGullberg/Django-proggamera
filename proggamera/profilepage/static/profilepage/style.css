@@ -28,7 +28,7 @@ body{
 .sidebar{
     z-index: 1;
     top: 0;
-    background: #2f323a;
+    background: #1C0230;
     margin-top: 36px;
     padding-top: 30px;
     position: fixed;
@@ -69,19 +69,28 @@ body{
 
   }
   
-  .sidebar a:hover{
-    background: #464646;
-    color:#B973DE;
-  }
+.sidebar a:hover{
+  background: #1C0230;
+  color:#B973DE;
+}
+
+.sidebar i{
+  padding-right: 10px;
+}
+.darkmode{
+  float:right;
   
-  .sidebar i{
-    padding-right: 10px;
-  }
-  .darkmode{
-    width:25%;
-    float:right;
-    
-  }
+}
+.loader{
+  position: fixed;
+  width:50%;
+  height:50%;
+  top:15%;
+  left:40%;
+  z-index:100;
+  background:url(/static/profilepage/loader.gif);
+  background-repeat: no-repeat;
+}
 .dark-light{
   cursor: pointer;
   background-color: white;
@@ -90,6 +99,7 @@ body{
 }
   /* Content*/
   .content{
+  
     margin-left: 250px;
     padding-top:50px;
     background-position: center;

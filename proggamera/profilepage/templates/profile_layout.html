@@ -93,15 +93,17 @@
         
       </div>
     {%endblock%}
+    <!-- <div class="loader"></div> -->
       <div class="content">
+        
         <div class="d-flex justify-content-end pr-5 pt-2  darkmode">
             <div class="dark-light border rounded d-flex p-1 "><i id="moon" class="fa-solid fa-moon pr-2 "></i><i id="sun" class="fas fa-light fa-sun"></i></div>
         </div>
+        
         {% block content %}
         
         {% endblock%}
       </div>
-    
     <script src="https://kit.fontawesome.com/de183acae2.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
@@ -115,12 +117,21 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
   <script>
+      function loader(){
+          showPage();
+      }
+      function showPage() {
+
+        document.querySelector(".loader").style.display = "none";
+        document.querySelector(".content").style.display = "block";
+
+        }
       let darklight = document.querySelector('.dark-light');
       darklight.addEventListener('click',darkmode);
         
       function darkmode(){
         let content = document.querySelector('.content');
-        console.log(content)
+        
         if(content.style.backgroundColor=="white"){
             darklight.classList.remove('bg-dark');
             content.style.backgroundColor="#242323"
