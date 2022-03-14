@@ -13,6 +13,8 @@
 <script>
     hljs.initLineNumbersOnLoad();
 </script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 
 {%endblock%}
 {% block sidebar %}
@@ -65,7 +67,7 @@
 </section>
 {%endblock%}
 {% block content %}
-
+<div class="congrats"><lottie-player class="player" src="https://assets3.lottiefiles.com/packages/lf20_lg6lh7fp.json"  background="transparent"  speed="1"  style="width: 80%; height: 80%;"></lottie-player></div>
 <div id="cont" class="d-flex justify-content-center course-content pt-2 mb-5 pb-4">
     {% if page_obj %}
     {% load embed_video_tags %}
@@ -74,36 +76,12 @@
     <div class="cont ml-5 w-75 pl-5 pr-3">
         <!-- <pre><div class="editor"></div></pre>
             <input id="run-button" type="submit" value="Kör"> -->
-        <div class="fill-in-the-blank p-3 rounded">
-            <h3>Fyll i resterande kod</h3>
-            <p>Skapa en variabel med namnet <span class="special-sign">meddelande</span> som sparar meddelandet </p>
-            <div class="fill-in-part p-3">
-                <div class="input " >
-                    
-                    <div class="code-text"> for i in range(1,5):
-                        
-                    </div>
-                    <div class="code-text">
-                        <span></span>  print(
-                    </div>
-  
-                    <input class="input-field" type="text" name="user_input" placeholder="Ditt svar">
-                    <div class="code-text">)</div>
-                        
-                        
-                    
-                </div>
 
-                <div class="pt-2 pr-2">
-                    <input class="fill-in-answer px-2" type="submit" value="Svara">
-                    <input class="fill-in-hint px-2 " type="submit" value="Hint">
-                    <input class="fill-in-facit px-2" type="submit" value="Facit">
-                </div>
-            </div>
+        
             
             
 
-        </div>
+        
         <div class="course-content pt-3 ">
             <h3><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
         </div>
@@ -114,6 +92,44 @@
             <p class="text-justify">{% autoescape off %}{{subchapter.content}}{% endautoescape %}</p>
         </div>
         <br>
+        {% if fill_in_blanks %}
+        {% for fill_in_blank in fill_in_blanks%}
+         <div class="fill-in-the-blank p-3 rounded">
+            <h3>Fyll i resterande kod: {{fill_in_blank.title}}</h3>
+            <p>{{fill_in_blank.description}}</p>
+            <div class="fill-in-part p-3">
+                <div class="input">  
+                    
+                    <div class="code-text">{{fill_in_blank.code_before}}
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="code-text">   {{fill_in_blank.code_on_input_line_before}}</div>
+                        
+                        <input class="input-field" id="fill-in-1" type="text" name="user_input" placeholder="Ditt svar">
+                        <input class="input-field" id="answer" type="hidden" value="{{fill_in_blank.answer}}">
+                        <div class="code-text">{{fill_in_blank.code_on_input_line_after}}</div>
+                        
+                    </div>
+                    <div class="code-text ">{{fill_in_blank.code_after}}</div>
+                
+                </div>
+
+                <div class="pt-2 pr-2">
+                    <input class="fill-in-answer px-2" type="submit" value="Svara">
+                    <input class="fill-in-hint px-2 " type="submit" value="Hint">
+                    <input class="fill-in-facit px-2" type="submit" value="Facit">
+                </div>
+            </div>
+            
+            <div class="hint-text ">
+                <h6>Hint:</h6><p>{{fill_in_blank.hint}}</p>
+            </div> 
+            <div class="facit-text ">
+                <h6>Svar:</h6><p>{{fill_in_blank.answer}}</p>
+            </div>
+        </div>
+        {%endfor%}
+        {%endif%}
         {% if subchapter.quiz_set.all %}
         {% if score >= 0 %}
         <div class="quiz pb-3 p-2 pl-5 pt-4">
@@ -152,6 +168,7 @@
 
     </div>
     <footer class="footer fixed-bottom d-flex justify-content-between align-items-center">
+        
         <div id="sidebarOpen" class="">
             <h5 class="ml-5 ">{{course}}<i class="fas fa-solid fa-bars fa-sm ml-5"></i></h5>
         </div>
@@ -238,15 +255,57 @@
                 }
 
             });
-
+            hljs.configure({useBR: true});
             let codetext = document.querySelectorAll('.code-text');
-            console.log(codetext)
             
             codetext.forEach((el) => {
-
                 el.classList.add("language-python");
-                hljs.tabReplace = '    ';
                 hljs.highlightElement(el);
+
+                
+                
+            });
+            let answer_button=document.querySelector(".fill-in-answer");
+            answer_button.addEventListener("click", function(){
+                var input_value = document.getElementById("fill-in-1").value;
+                var answer_value=document.getElementById("answer").value;
+                console.log(input_value);
+                console.log(answer_value);
+                if(input_value==answer_value){
+                    let congrats_vid = document.querySelector(".congrats");
+                    congrats_vid.style.display="block";
+                    let vid = document.querySelector(".player");
+                    vid.play();
+                    setTimeout(function(){
+                        congrats_vid.style.display="none";
+                    },1500);
+                    
+                }
+                else{
+                    alert("Fel svar");
+                }
+            });
+            let hint_button=document.querySelector(".fill-in-hint");
+            hint_button.addEventListener("click", function(){
+                var hint_text = document.querySelector('.hint-text');
+                if(hint_text.style.display == "flex"){
+                    hint_text.style.display = "none";
+                }
+                else{
+                    hint_text.style.display = "flex";
+                }
+                
+            });
+
+            let facit_button=document.querySelector(".fill-in-facit");
+            facit_button.addEventListener("click", function(){
+                var facit_text = document.querySelector('.facit-text');
+                if(facit_text.style.display == "flex"){
+                    facit_text.style.display = "none";
+                }
+                else{
+                    facit_text.style.display = "flex";
+                }
                 
             });
             

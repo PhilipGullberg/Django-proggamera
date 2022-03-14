@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Videos)
 admin.site.register(Quiz)
 admin.site.register(Quizresult)
+admin.site.register(FillInBlanks)

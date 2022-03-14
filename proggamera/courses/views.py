@@ -37,8 +37,9 @@ def subchapter(request,courseid,chapterid, pageid):
     else:
         curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(1))
     
-    
+    curr_fillblanks= FillInBlanks.objects.filter(subchapter=curr_subchapter)
     curr_quiz=Quiz.objects.filter(parent=curr_subchapter)
+    print(curr_fillblanks)
     if request.method == 'POST':
         answer_dic=list(request.POST.items())
         student_answers=[]
@@ -77,17 +78,9 @@ def subchapter(request,courseid,chapterid, pageid):
             print(curr_quiz)
             for q in curr_quiz:
                 print(q)
-            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':data[0].result, 'num_questions':len(curr_quiz)})
+            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':data[0].result, 'num_questions':len(curr_quiz),'fill_in_blanks':curr_fillblanks})
         else:
-            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj})
+            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks})
     except IndexError:
-        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj})
+        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks})
 
-def next_subchapter(request, courseid, subchapterid):
-    curr_course=Course.objects.get(id=courseid)
-    chapters=Chapters.objects.filter(course=curr_course)
-    curr_chapter_number=Subchapters.objects.filter(id=subchapterid).values("subchapter_number")
-    for curr in curr_chapter_number:
-        next_number=(curr['subchapter_number'])+1
-    subchapter=Subchapters.objects.filter(subchapter_number=next_number,parent_chapter=chapters)
-    return render(request,"course.html", {"course":curr_course,"chapters":chapters, "subchapter": subchapter})
