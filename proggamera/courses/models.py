@@ -36,11 +36,11 @@ class Quizresult(models.Model):
 class FillInBlanks(models.Model):
     subchapter=models.ForeignKey("profilepage.Subchapters", on_delete=models.CASCADE)
     title=models.CharField(max_length=60)
-    description=models.CharField(max_length=200, null=True)
-    code_before = models.TextField(max_length=500)
-    code_on_input_line_before=models.CharField(max_length=50)
-    code_on_input_line_after=models.CharField(max_length=50)
-    input_length=models.CharField(max_length=50)
+    description=models.CharField(max_length=200, null=True,blank=True)
+    code_before = models.TextField(max_length=500,blank=True,)
+    code_on_input_line_before=models.TextField(max_length=50,blank=True)
+    code_on_input_line_after=models.TextField(max_length=50,blank=True)
+    input_length=models.TextField(max_length=50, blank=True)
     code_after = models.TextField(max_length=500, blank=True)
     answer=models.CharField(max_length=100, blank=True)
     hint=models.CharField(max_length=500)
@@ -48,3 +48,13 @@ class FillInBlanks(models.Model):
     
     def __str__(self):
         return f"{self.title}: {self.description}"
+
+class FillInBlanksResults(models.Model):
+    parent=models.ForeignKey(FillInBlanks, on_delete=models.CASCADE)
+    student=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
+    answer=models.CharField(max_length=50)
+    result=models.IntegerField()
+
+    def __str__(self):
+        return f"{self.parent}: {self.student}: result {self.result}"
+        

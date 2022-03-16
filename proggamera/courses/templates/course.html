@@ -7,6 +7,8 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js">
 </script>
+<script src="{% static 'courses/script.js' %}"></script>
+
 <script>
     hljs.highlightAll();
 </script>
@@ -67,7 +69,10 @@
 </section>
 {%endblock%}
 {% block content %}
-<div class="congrats"><lottie-player class="player" src="https://assets3.lottiefiles.com/packages/lf20_lg6lh7fp.json"  background="transparent"  speed="1"  style="width: 80%; height: 80%;"></lottie-player></div>
+<div class="congrats">
+    <lottie-player class="player" src="https://assets3.lottiefiles.com/packages/lf20_lg6lh7fp.json"
+        background="transparent" speed="1" style="width: 80%; height: 80%;"></lottie-player>
+</div>
 <div id="cont" class="d-flex justify-content-center course-content pt-2 mb-5 pb-4">
     {% if page_obj %}
     {% load embed_video_tags %}
@@ -77,11 +82,11 @@
         <!-- <pre><div class="editor"></div></pre>
             <input id="run-button" type="submit" value="Kör"> -->
 
-        
-            
-            
 
-        
+
+
+
+
         <div class="course-content pt-3 ">
             <h3><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
         </div>
@@ -94,109 +99,132 @@
         <br>
         {% if fill_in_blanks %}
         {% for fill_in_blank in fill_in_blanks%}
-         <div class="fill-in-the-blank p-3 rounded">
+
+        <div class="fill-in-the-blank p-3 mb-3 rounded ">
             <h3>Fyll i resterande kod: {{fill_in_blank.title}}</h3>
             <p>{{fill_in_blank.description}}</p>
-            <div class="fill-in-part p-3">
-                <div class="input">  
-                    
+            <div class="fill-in-part p-3 rounded">
+                <div class="input">
+
+
                     <div class="code-text">{{fill_in_blank.code_before}}
                     </div>
                     <div class="d-flex align-items-center">
-                        <div class="code-text">   {{fill_in_blank.code_on_input_line_before}}</div>
-                        
-                        <input class="input-field" id="fill-in-1" type="text" name="user_input" placeholder="Ditt svar">
-                        <input class="input-field" id="answer" type="hidden" value="{{fill_in_blank.answer}}">
-                        <div class="code-text">{{fill_in_blank.code_on_input_line_after}}</div>
-                        
+                        <div class="code-text">{{fill_in_blank.code_on_input_line_before}}</div>
+
+
+                        <form class="d-flex align-items-center" hx-post="" hx-swap="innerHTML" hx-target="#result">
+                            {%csrf_token%}
+
+                            <input class="input-field" id="fill-in-1" type="text" name="user_input"
+                                size="{{fill_in_blank.input_length}}" {%  if student_fill_result.first.answer %}
+                                value="{{student_fill_result.first.answer}}" {%else %} placeholder="Svar" {%endif%}>
+
+                            <input class="input-field" id="answer" type="hidden" value="{{fill_in_blank.answer}}">
+                            
+                            <div class="code-text">{{fill_in_blank.code_on_input_line_after}}</div>
+
+                            
                     </div>
                     <div class="code-text ">{{fill_in_blank.code_after}}</div>
-                
+                    
+
+                    <div class="pt-3 pr-2 mt-5 d-flex justify-content-between">
+                        <div>
+                        <input class="fill-in-answer px-2" type="submit" value="Svara">
+                        <input class="fill-in-hint px-2 " type="button" value="Hint">
+                        <input class="fill-in-facit px-2" type="button" value="Facit">
+                        </div>
+                        <div id="result" class="ml-2">
+                            {%if student_fill_result.first.result == 1 %}
+                            <i class="fa-solid fa-circle-check fa-2xl align-self-end"></i>
+                            {%else%}
+                            <i class="fa-solid fa-circle-xmark fa-2xl align-self-end"></i>
+                            {%endif%}
+                        </div>
+                    </div>
+                    </form>
                 </div>
 
-                <div class="pt-2 pr-2">
-                    <input class="fill-in-answer px-2" type="submit" value="Svara">
-                    <input class="fill-in-hint px-2 " type="submit" value="Hint">
-                    <input class="fill-in-facit px-2" type="submit" value="Facit">
+                <div class="hint-text ">
+                    <h6>Hint:</h6>
+                    <p>{{fill_in_blank.hint}}</p>
+                </div>
+                <div class="facit-text ">
+                    <h6>Svar:</h6>
+                    <p>{{fill_in_blank.answer}}</p>
                 </div>
             </div>
-            
-            <div class="hint-text ">
-                <h6>Hint:</h6><p>{{fill_in_blank.hint}}</p>
-            </div> 
-            <div class="facit-text ">
-                <h6>Svar:</h6><p>{{fill_in_blank.answer}}</p>
             </div>
-        </div>
-        {%endfor%}
-        {%endif%}
-        {% if subchapter.quiz_set.all %}
-        {% if score >= 0 %}
-        <div class="quiz pb-3 p-2 pl-5 pt-4">
-            <h3>Quiz</h3>
-            <p>Resultat: {{score}} av {{num_questions}}</p>
-        </div>
+            {%endfor%}
+            {%endif%}
+            {% if subchapter.quiz_set.all %}
+            {% if score >= 0 %}
+            <div class="quiz pb-3 p-2 pl-5 pt-4">
+                <h3>Quiz</h3>
+                <p>Resultat: {{score}} av {{num_questions}}</p>
+            </div>
 
-        {%else%}
-        <div class="quiz  p-2 pl-5 pt-4">
-            <h3>Quiz</h3>
-            {% for quiz in subchapter.quiz_set.all %}
-            <form method="POST" action="" class="pt-1 pb-2 ">
-                {% csrf_token %}
-                <label for="{{quiz.question}}"></label>
-                <h6>{{quiz.question}}</h6></input>
-                <input type="radio" name="{{quiz.question}}" value="{{quiz.question}}" hidden></input>
-                <input type="radio" name="{{quiz.op1}}" id="op1" value="{{quiz.op1}}"> {{quiz.op1}}</input>
-                <br>
-                <input type="radio" name="{{quiz.op1}}" id="op2" value="{{quiz.op2}}"> {{quiz.op2}}</input>
-                <br>
-                <input type="radio" name="{{quiz.op1}}" id="op3" value="{{quiz.op3}}"> {{quiz.op3}}</input>
-                <br>
-                <input type="radio" name="{{quiz.op1}}" id="op4" value="{{quiz.op4}}"> {{quiz.op4}}</input>
-
-                <br>
-                <br>
-                {%endfor%}
-                <input type="submit" value="Skicka in svar">
-            </form>
-        </div>
-
-        {%endif%}
-        {%endif%}
-        {%endfor%}
-        {%endif%}
-
-    </div>
-    <footer class="footer fixed-bottom d-flex justify-content-between align-items-center">
-        
-        <div id="sidebarOpen" class="">
-            <h5 class="ml-5 ">{{course}}<i class="fas fa-solid fa-bars fa-sm ml-5"></i></h5>
-        </div>
-        <div class="d-flex  justify-content-around align-items-center">
-            {% if page_obj.has_previous %}
-            <div class="back-button"> <i class=" fas fa-solid fa-angle-left"></i> <a style="color:black;"
-                    href="?page={{ page_obj.previous_page_number }}"> Bakåt</a></div>
-            {% endif %}
-            <p class="ml-2 mr-2 pt-3">Sida {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</p>
-            {% if page_obj.has_next %}
-            <div class="next-button"><a style="color:white;" href="?page={{ page_obj.next_page_number }}"> Nästa </a> <i
-                    class=" fas fa-solid fa-angle-right"></i></div>
             {%else%}
-            <!-- TODO 
+            <div class="quiz  p-2 pl-5 pt-4">
+                <h3>Quiz</h3>
+                {% for quiz in subchapter.quiz_set.all %}
+                <form method="POST" action="" class="pt-1 pb-2 ">
+                    {% csrf_token %}
+                    <label for="{{quiz.question}}"></label>
+                    <h6>{{quiz.question}}</h6></input>
+                    <input type="radio" name="{{quiz.question}}" value="{{quiz.question}}" hidden></input>
+                    <input type="radio" name="{{quiz.op1}}" id="op1" value="{{quiz.op1}}"> {{quiz.op1}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.op1}}" id="op2" value="{{quiz.op2}}"> {{quiz.op2}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.op1}}" id="op3" value="{{quiz.op3}}"> {{quiz.op3}}</input>
+                    <br>
+                    <input type="radio" name="{{quiz.op1}}" id="op4" value="{{quiz.op4}}"> {{quiz.op4}}</input>
+
+                    <br>
+                    <br>
+                    {%endfor%}
+                    <input type="submit" value="Skicka in svar">
+                </form>
+            </div>
+
+            {%endif%}
+            {%endif%}
+            {%endfor%}
+            {%endif%}
+
+        </div>
+        <footer class="footer fixed-bottom d-flex justify-content-between align-items-center">
+
+            <div id="sidebarOpen" class="">
+                <h5 class="ml-5 ">{{course}}<i class="fas fa-solid fa-bars fa-sm ml-5"></i></h5>
+            </div>
+            <div class="d-flex  justify-content-around align-items-center">
+                {% if page_obj.has_previous %}
+                <div class="back-button"> <i class=" fas fa-solid fa-angle-left"></i> <a style="color:black;"
+                        href="?page={{ page_obj.previous_page_number }}"> Bakåt</a></div>
+                {% endif %}
+                <p class="ml-2 mr-2 pt-3">Sida {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</p>
+                {% if page_obj.has_next %}
+                <div class="next-button"><a style="color:white;" href="?page={{ page_obj.next_page_number }}"> Nästa
+                    </a> <i class=" fas fa-solid fa-angle-right"></i></div>
+                {%else%}
+                <!-- TODO 
         Lägg till så att man hoppar till nästa kapitel, eller att man får bekräftelse att man är klar på något sätt
         -->
-            <div class="btn-success p-1"><a style="color:white;" href="{% url 'courses' course.id%}/?page=1"> Klar med
-                    kapitlet </a> <i class=" fas fa-solid fa-angle-right"></i></div>
-            {% endif %}
+                <div class="btn-success p-1"><a style="color:white;"> Klar med kapitlet </a> <i
+                        class=" fas fa-solid fa-angle-right"></i></div>
+                {% endif %}
 
-        </div>
-        <div>
-            <div id="sidebar" class="ml-5 mr-5">
-                <h5>Uppgifter<i class="fas fa-solid fa-bars fa-sm ml-3 mr-2"></i></h5>
             </div>
-        </div>
-    </footer>
-    <!-- <script type="module">
+            <div>
+                <div id="sidebar" class="ml-5 mr-5">
+                    <h5>Uppgifter<i class="fas fa-solid fa-bars fa-sm ml-3 mr-2"></i></h5>
+                </div>
+            </div>
+        </footer>
+        <!-- <script type="module">
     import {CodeJar} from 'https://medv.io/codejar/codejar.js'
     let jar = CodeJar(document.querySelector('.editor'),highlight);
     let code = jar.toString();
@@ -212,106 +240,6 @@
         console.log(code);
     });
 </script> -->
-    <script>
-        $(document).ready(function () {
-            $("pre").css({
-                "font-size": "14px",
-                "font-family": "Helvetica",
-                "letter-spacing": "2px",
-                "border-radius": "5px",
-                "filter": "drop-shadow(0 0 0.3rem grey)"
-            });
-            $("code").css({
-                "padding-left": "20px",
-                "padding-top": "10px",
-                "padding-bottom": "5px",
-                "border-radius": "7px",
-                "filter": "drop-shadow(0 0 0.3rem grey)"
-            });
-            $('.content').css({
-                "margin-left": "0px"
-            });
-            $('#sidebarCollapse').on('click', function () {
-                console.log("hello")
-                $('.content').css({
-                    "margin-left": "0px"
-                });
-                $('#sidebar').toggleClass('close');
-                $('#sidebar').removeClass('open');
-            });
-            $('#sidebarOpen').on('click', function () {
-                if ($('#sidebar').hasClass('close')) {
-                    $('.content').css({
-                        "margin-left": "100px"
-                    });
-                    $('#sidebar').toggleClass('open');
-                    $('#sidebar').removeClass('close');
-                } else {
-                    $('.content').css({
-                        "margin-left": "0px"
-                    });
-                    $('#sidebar').toggleClass('close');
-                    $('#sidebar').removeClass('open');
-                }
 
-            });
-            hljs.configure({useBR: true});
-            let codetext = document.querySelectorAll('.code-text');
-            
-            codetext.forEach((el) => {
-                el.classList.add("language-python");
-                hljs.highlightElement(el);
 
-                
-                
-            });
-            let answer_button=document.querySelector(".fill-in-answer");
-            answer_button.addEventListener("click", function(){
-                var input_value = document.getElementById("fill-in-1").value;
-                var answer_value=document.getElementById("answer").value;
-                console.log(input_value);
-                console.log(answer_value);
-                if(input_value==answer_value){
-                    let congrats_vid = document.querySelector(".congrats");
-                    congrats_vid.style.display="block";
-                    let vid = document.querySelector(".player");
-                    vid.play();
-                    setTimeout(function(){
-                        congrats_vid.style.display="none";
-                    },1500);
-                    
-                }
-                else{
-                    alert("Fel svar");
-                }
-            });
-            let hint_button=document.querySelector(".fill-in-hint");
-            hint_button.addEventListener("click", function(){
-                var hint_text = document.querySelector('.hint-text');
-                if(hint_text.style.display == "flex"){
-                    hint_text.style.display = "none";
-                }
-                else{
-                    hint_text.style.display = "flex";
-                }
-                
-            });
-
-            let facit_button=document.querySelector(".fill-in-facit");
-            facit_button.addEventListener("click", function(){
-                var facit_text = document.querySelector('.facit-text');
-                if(facit_text.style.display == "flex"){
-                    facit_text.style.display = "none";
-                }
-                else{
-                    facit_text.style.display = "flex";
-                }
-                
-            });
-            
-        
-            
-        });
-    </script>
-
-    {%endblock%}
+        {%endblock%}
