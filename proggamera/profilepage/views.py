@@ -3,6 +3,8 @@ from http.client import HTTPResponse
 from msilib.schema import Class
 from multiprocessing import context
 from django.shortcuts import render
+
+from courses.models import Quiz
 from .forms import *
 from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
@@ -87,6 +89,7 @@ def s_classroom(request):
 def s_courses(request):
     curr_user=Student.objects.get(user=request.user)
     courses=Course.objects.filter(student=curr_user)
+    print(courses)
     
     return render(request, 'student_courses.html',{"courses":courses})
 
@@ -94,12 +97,18 @@ def curr_classroom(request, pk):
     classroom = Classroom.objects.get(id=pk)
     courses=Course.objects.filter(classroom__id=pk)
     students=Student.objects.filter(classroom__id=pk)
-    """ print("hej")
-    curr = request.POST.get('klassnamn', None) 
-    curr_classroom=Classroom.objects.filter(name=curr)
-    print(curr_classroom)
-    #if request.is_ajax and request.method == "POST": """
-    context={'classroom':classroom, 'courses':courses,'students':students}
+    if request.method == "POST":
+        form = add_course_form(request.POST)
+        if form.is_valid():
+            chosen_courses=form.cleaned_data["courses"]
+            if len(chosen_courses)>1:
+                    for i in range(len(chosen_courses)):
+                        classroom.courses.add(chosen_courses[i])
+            else:
+                classroom.courses.add(chosen_courses[0])
+    else:
+        form=add_course_form()
+    context={'classroom':classroom, 'courses':courses,'students':students,'form':form}
     return render(request,'classroom.html',context)
 
 def add_students(request, pk):
@@ -203,3 +212,11 @@ def t_results(request):
     teachers_students=Student.objects.filter(classroom__teacher=curr_teacher)
 
     return render(request, 'teacher_results.html',{'students':teachers_students,'classrooms':teachers_classrooms, 'courses':classroom_courses})
+
+def t_overview(request, classid, courseid):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    curr_classroom=Classroom.objects.get(id=classid)
+    curr_course=Course.objects.get(id=courseid)
+    course_chapters=Chapters.objects.filter(course=curr_course)
+    course_students=Student.objects.filter(courses=curr_course, classroom=curr_classroom)
+    return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students})
