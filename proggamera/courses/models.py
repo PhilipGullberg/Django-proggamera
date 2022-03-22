@@ -1,6 +1,7 @@
 from pyexpat import model
 from django.db import models
 from embed_video.fields  import  EmbedVideoField
+from .fields import NonStrippingTextField
 
 # Create your models here.
 
@@ -12,7 +13,7 @@ class Videos (models.Model):
     def  __str__(self):
 	    return  self.video_title
 
-class Quiz (models.Model):
+class Quiz(models.Model):
     parent=models.ForeignKey("profilepage.Subchapters", on_delete=models.CASCADE)
     question = models.CharField(max_length=200,null=True)
     op1 = models.CharField(max_length=200,null=True)
@@ -37,11 +38,11 @@ class FillInBlanks(models.Model):
     subchapter=models.ForeignKey("profilepage.Subchapters", on_delete=models.CASCADE)
     title=models.CharField(max_length=60)
     description=models.CharField(max_length=200, null=True,blank=True)
-    code_before = models.TextField(max_length=500,blank=True,)
-    code_on_input_line_before=models.TextField(max_length=50,blank=True)
-    code_on_input_line_after=models.TextField(max_length=50,blank=True)
-    input_length=models.TextField(max_length=50, blank=True)
-    code_after = models.TextField(max_length=500, blank=True)
+    code_before = NonStrippingTextField(max_length=500,blank=True,)
+    code_on_input_line_before=NonStrippingTextField(max_length=50,blank=True)
+    code_on_input_line_after=NonStrippingTextField(max_length=50,blank=True)
+    input_length=models.CharField(max_length=50, blank=True)
+    code_after = NonStrippingTextField(max_length=500, blank=True)
     answer=models.CharField(max_length=100, blank=True)
     hint=models.CharField(max_length=500)
     

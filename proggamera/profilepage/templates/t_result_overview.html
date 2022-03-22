@@ -1,0 +1,264 @@
+{% extends 'profile_layout.html' %}
+{% block content %}
+{% load static %}
+<h3 class="py-2">Översikt {{classroom}} - {{course}}</h3>
+<div class="d-flex">
+    <div class="topbanner ml-0 mt-2 p-3 pr-2 mb-5 w-50 rounded">
+        <div class="d-flex justify-content-between ">
+            <div class="d-flex flex-column  pl-4 pt-1">
+                <div>
+                    <h3 class="pt-0 mt-0">Senaste uppgifter</h3>
+                </div>
+                <div class="pr-5">
+                    <table class="mb-5">
+                        <tr>
+                            <th>Quiz</th>
+                            <th>Läst</th>
+                            <th>Fyll i</th>
+                        </tr>
+                        <tr>
+                            <td>{{classroom}} :
+                                {%for course in classroom.courses.all|slice:"1" %}
+                                {{course}} :
+                                {%for chap in course.chapters_set.all|slice:"1"%}
+                                {{chap}}
+                                {%endfor%}
+                            </td>
+                            <td>
+                                {{classroom}} :
+                                {%for course in classroom.courses.all|slice:"1" %}
+                                {{course}} :
+                                {%for chap in course.chapters_set.all|slice:"1"%}
+                                {{chap}}
+                                {%endfor%}
+                                {%endfor%}
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {%for course in classroom.courses.all|slice:"1:" %}
+                                {{classroom}} :
+                                {{course}} :
+
+                                {%for chap in course.chapters_set.all|slice:"1:"%}
+                                {{chap}}
+                                {%endfor%}
+
+                                {%endfor%}</td>
+                            <td>
+                                {%for course in classroom.courses.all|slice:"1:" %}
+                                {{classroom}} :
+                                {{course}} :
+
+                                {%for chap in course.chapters_set.all|slice:"1:"%}
+                                {{chap}}
+                                {%endfor%}
+
+                                {%endfor%}
+                            </td>
+                        </tr>
+                        {%endfor%}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div class="mb-2 align-item-end">
+                    <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;"
+                            href="{% url 't_classroom' %}">Lägg till ny uppgift</a> </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="mt-0 ms-5 w-50 text-center">
+        <h3 class="pt-0 mt-0">Totala resultat</h3>
+        <canvas style="z-index: 9999" class="pl-5 pr-5 " id="myChart"></canvas>
+    </div>
+</div>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#allt" type="button"
+            role="tab" aria-controls="home" aria-selected="true">Allt</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab"
+            aria-controls="profile" aria-selected="false">Quizresultat</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#inlämning" type="button"
+            role="tab" aria-controls="contact" aria-selected="false">Inlämningsuppgifter</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#kapitel" type="button"
+            role="tab" aria-controls="contact" aria-selected="false">Kapitel och videos</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="allt" role="tabpanel" aria-labelledby="home-tab">
+        <div class="resultpage py-3">
+            <h3>Elever/Kapitel</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <tr >
+                        <th cope="col">Elev/Kapitel</th>
+                        {%for chapter in chapters %}
+                        {% for subchapter in chapter.sub.all%}
+                        <th cope="col">{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
+                        {%endfor%}
+                        {%endfor%}
+                    </tr>
+
+                    {% for student in students %}
+                    <tr>
+                        <th scope="row">{{student}}</th>
+
+                        {%for chapter in chapters %}
+                            {% for subchapter in chapter.sub.all%}
+                            <td>
+                            <!-- Code to show results of quizes-->
+                                {% if subchapter.quiz_set.all %}
+                                    {% for quizresult in subchapter.quiz_set.all.first.quizresult_set.all%}
+                                        {% if student == quizresult.students%}
+                                        
+                                            {% if quizresult.result == 1 %}
+                                                Quiz för {{quizresult.students}} -  <img src="{%static 'profilepage/icquiz.png' %}"></img>   
+                                            {%else%}
+                                                Quiz för {{quizresult.students}} -  <img src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                            {%endif%}
+                                        {%endif%}
+                                    {%endfor%}
+                                    {{student.quiz_set.all}}
+                                        <img src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                    
+                                    
+                                {%else%}
+                                    no quiz
+                                {%endif%}
+                                <!--Code to show results for fillinblanks-->
+                                {% if subchapter.fillinblanks_set.all %}
+                                    {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
+                                        {% if student == fillresult.student %}
+                                            {% if fillresult.result == 1 %}
+                                                Fillinblankresultat: <i id="right" class="fa-brands fa-wpforms"></i>
+                                            {%else%}
+                                                Fillinblankresultat: <i id="wrong" class="fa-brands fa-wpforms"></i>
+                                            {%endif%}
+                                        {%endif%}
+                                    {%endfor%}
+                                    {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
+                                        {% if student != fillresult.student %}
+                                            <i class="fa-brands fa-wpforms"></i>
+                                        {%endif%}
+                                    {%endfor%}
+                               
+                                {%else%}
+                                    no fill
+                                {%endif%}
+                            {%endfor%}
+                            </td>
+                        {%endfor%}
+                    </tr>
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="profile-tab">
+        <p>Här kan du se alla dina elevers quiz-resultat.</p>
+    </div>
+    <div class="tab-pane fade" id="inlämning" role="tabpanel" aria-labelledby="contact-tab">
+        <p>Här kan du se alla dina elevers inlämningsuppgifter.</p>
+    </div>
+    <div class="tab-pane fade" id="kapitel" role="tabpanel" aria-labelledby="contact-tab">
+        <p>Här kan du följa vilka kapitel och videos som dina elever har sett</p>
+    </div>
+</div>
+
+
+
+
+<div class="resultpage py-3">
+    <div class="classroom p-4 mb-3 mr-5 rounded">
+        {% for course in classroom.courses.all%}
+        {% for student in classroom.students.all %}
+        {% if student.quizresult_set.all%}
+
+        {% if forloop.parentloop.first %}
+        <h3 class="pb-2">Klass: {{classroom}}</h3>
+        {%endif%}
+        <h5 class="pb-1">{{course}}</h5>
+        <table class="result_table">
+            <tr>
+                <th>Elev</th>
+                <th>Delkapitel</th>
+                <th>Quiz</th>
+                <th>Svarat</th>
+                <th>Rätt svar</th>
+                <th>Resultat</th>
+            </tr>
+
+            {% for result in student.quizresult_set.all %}
+
+            {% if result.quiz.parent.parent_chapter.course == course%}
+            <tr>
+                <td>{{student}}</td>
+                <td>{{result.quiz.parent}}</td>
+                <td>{{result.quiz}}</td>
+                <td>{{result.answers}}</td>
+                <td>{{result.quiz.ans}}</td>
+                <td>{{result.result}}</td>
+            </tr>
+            {%endif%}
+            {%endfor%}
+
+
+
+
+        </table>
+        {%endif%}
+        {%endfor%}
+        {%endfor%}
+    </div>
+
+</div>
+
+<script>
+    const data = {
+        labels: [
+            'Red',
+            'Green',
+            'Yellow'
+        ],
+        datasets: [{
+            label: 'My First Dataset',
+            data: [20, 150, 100],
+            backgroundColor: [
+                'rgb(255, 99, 132)',
+                'green',
+                'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+        }]
+    };
+
+    const config = {
+        type: 'doughnut',
+        data: data,
+        options: {}
+    };
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+</script>
+{%endblock%}

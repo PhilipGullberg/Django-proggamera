@@ -9,22 +9,21 @@
     <link rel="stylesheet" href="{% static 'profilepage/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/dcd3bbc21c.js" crossorigin="anonymous"></script>
     <link rel="ICON" href="https://icon-library.com/images/icon-programing/icon-programing-12.jpg" type="image/ico" />
-    
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     {% block extrahead %}{%endblock%}
     <title>Document</title>
 </head>
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <nav class="navbar navbar-expand-md navbar-dark navigation py-1 ">
+    <nav class="navbar navbar-expand navbar-dark navigation py-1 ">
         <a class="navbar-brand d-flex flex-inline" href="{% url 'landing' %}">
             <img class="brand-img" src="https://icon-library.com/images/icon-programing/icon-programing-12.jpg"
                 width="30" height="30" class="d-inline-block align-top" alt="">
-            <p class="d-flex m-0 ml-2 logo-text">ProggaMera</p>
+            <p class="d-flex m-0 ms-2 logo-text">ProggaMera</p>
         </a>
         <!-- Right elements -->
         <div class="container-fluid d-flex justify-content-end  ">
@@ -96,8 +95,8 @@
     <!-- <div class="loader"></div> -->
       <div class="content">
         
-        <div class="d-flex justify-content-end pr-5 pt-2  darkmode">
-            <div class="dark-light border rounded d-flex p-1 "><i id="moon" class="fa-solid fa-moon pr-2 "></i><i id="sun" class="fas fa-light fa-sun"></i></div>
+        <div class="d-flex justify-content-end darkmode mx-3 mt-3">
+            <div class="dark-light border rounded d-flex p-1  "><i id="moon" class="fa-solid fa-moon pr-2 "></i><i id="sun" class="fas fa-light fa-sun"></i></div>
         </div>
         
         {% block content %}
@@ -131,12 +130,17 @@
         
       function darkmode(){
         let content = document.querySelector('.content');
+        let table=document.querySelector('.table');
         
         if(content.style.backgroundColor=="white"){
             darklight.classList.remove('bg-dark');
             content.style.backgroundColor="#242323"
             content.style.color="white";
             darklight.style.color="black";
+            table.classList.add("table")
+            table.classList.remove('table-dark');
+            
+           
         }
         else{
             darklight.classList.add('bg-dark');
@@ -144,6 +148,8 @@
             content.style.backgroundColor="white";
             content.style.color="black";
             darklight.style.color="white";
+            table.classList.add("table-dark")
+        
         }
         
       }

@@ -3,6 +3,8 @@ from http.client import HTTPResponse
 from msilib.schema import Class
 from multiprocessing import context
 from django.shortcuts import render
+
+from courses.models import Quiz
 from .forms import *
 from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
@@ -210,3 +212,11 @@ def t_results(request):
     teachers_students=Student.objects.filter(classroom__teacher=curr_teacher)
 
     return render(request, 'teacher_results.html',{'students':teachers_students,'classrooms':teachers_classrooms, 'courses':classroom_courses})
+
+def t_overview(request, classid, courseid):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    curr_classroom=Classroom.objects.get(id=classid)
+    curr_course=Course.objects.get(id=courseid)
+    course_chapters=Chapters.objects.filter(course=curr_course)
+    course_students=Student.objects.filter(courses=curr_course, classroom=curr_classroom)
+    return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students})
