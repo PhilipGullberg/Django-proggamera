@@ -4,7 +4,7 @@ from msilib.schema import Class
 from multiprocessing import context
 from django.shortcuts import render
 
-from courses.models import Quiz
+from courses.models import Quiz, VisitedPage
 from .forms import *
 from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
@@ -219,4 +219,5 @@ def t_overview(request, classid, courseid):
     curr_course=Course.objects.get(id=courseid)
     course_chapters=Chapters.objects.filter(course=curr_course)
     course_students=Student.objects.filter(courses=curr_course, classroom=curr_classroom)
-    return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students})
+    visitedpages=VisitedPage.objects.all()
+    return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students,"visited":visitedpages})
