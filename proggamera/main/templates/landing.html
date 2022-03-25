@@ -20,7 +20,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark nav  ">
+  <nav class="navbar navbar-expand navbar-dark nav  ">
     <div class="container-fluid">
     <a class="navbar-brand d-flex flex-inline" href="{% url 'landing' %}">
         <img class="brand-img" src="https://icon-library.com/images/icon-programing/icon-programing-12.jpg"
@@ -262,52 +262,59 @@
     <div class="circle mb-2 ml-5"></div>
     <div class="circle mb-1 ml-5"></div>
   </div>
-  <div class="d-flex py-5 pl-5  justify-content-around">
+
+  <div class="d-flex py-5 pl-5 flex-wrap  justify-content-around">
     <div class="card" style="width: 18rem;">
       <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Webbutveckling 1</h5>
-        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
-        <ul class="pl-3 pb-3">
-          <li>12 kapitel</li>
-          <li>Instruktionsfilm för varje kapitel</li> 
-          <li> Quiz och Uppgifter</li>
-        </ul>
-          
-        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div>
+          <h5 class="card-title">Webbutveckling 1</h5>
+          <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
+          <ul class="pl-3 pb-3">
+            <li>12 kapitel</li>
+            <li>Instruktionsfilm för varje kapitel</li> 
+            <li> Quiz och Uppgifter</li>
+          </ul>
+        </div>
+        <div class=""><a href="#" class="blackbutton course my-5">Läs mer</a></div>
+        
       </div>
     </div>
     <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Webbutveckling 1</h5>
-        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
+      <img class="card-img-top" src="{% static 'main/laptop.jfif' %}" alt="Card image cap">
+      <div class="card-body d-flex flex-column justify-content-between">
+        <h5 class="card-title">Programmering 1</h5>
+        <p class="card-text">En kurs i hur man skriver instruktioner till en dator för att skapa program</p>
         <ul class="pl-3 pb-3">
-          <li>12 kapitel</li>
+          <li>9 kapitel</li>
           <li>Instruktionsfilm för varje kapitel</li> 
+          <li>Javascript eller Python</li> 
           <li> Quiz och Uppgifter</li>
         </ul>
-          
-        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+        <div>
+          <a href="#" class="blackbutton course my-5">Läs mer</a>
+        </div>
       </div>
     </div>
     <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="{% static 'main/webbutvecklingimg.png' %}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Webbutveckling 1</h5>
-        <p class="card-text">En kurs i hur man skapar hemsidor med hjälp av HTML, CSS och Javascript.</p>
-        <ul class="pl-3 pb-3">
-          <li>12 kapitel</li>
-          <li>Instruktionsfilm för varje kapitel</li> 
-          <li> Quiz och Uppgifter</li>
-        </ul>
-          
-        <a href="#" class="blackbutton course my-5">Go somewhere</a>
+      <img class="card-img-top" src="{% static 'main/gränssnitt.png' %}" alt="Card image cap">
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div>
+          <h5 class="card-title">Gränssnittsdesign</h5>
+          <p class="card-text">I denna kurs får man lära sig skapa det visuella för appar och hemsidor</p>
+          <ul class="pl-3 pb-3">
+            <li>5 kapitel</li>
+            <li>Instruktionsfilm för varje kapitel</li> 
+            <li> Quiz och Uppgifter</li>
+          </ul>
+        </div>
+        <div>
+          <a href="#" class="blackbutton course my-5">Läs mer</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
-    
     {% endblock%}
 
   

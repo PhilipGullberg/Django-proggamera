@@ -1,21 +1,30 @@
+from email import message
 from http.client import HTTPResponse
 from msilib.schema import Class
 from multiprocessing import context
 from django.shortcuts import render
+
+from courses.models import Quiz, VisitedPage
 from .forms import *
-from .models import *
+from .models import Course, Chapters, Subchapters, Student, Teacher, Classroom
 from user.models import *
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
+from django.contrib import messages
 # Create your views here.
 
 
 def teacherdash(request):
     curr_teacher=Teacher.objects.get(user=request.user)
     teachers_classrooms=Classroom.objects.filter(teacher=curr_teacher)
+    teachers_courses=Course.objects.filter(classroom__teacher=curr_teacher)
+    courses=[]
+    for course in teachers_courses:
+        if course not in courses:
+            courses.append(course)
     if request.user.is_authenticated:
         if request.user.is_teacher :
-            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms})
+            return render(request,'teacherdash.html',{'classrooms':teachers_classrooms,'courses':courses})
 
             
 def studentdash(request):
@@ -80,6 +89,7 @@ def s_classroom(request):
 def s_courses(request):
     curr_user=Student.objects.get(user=request.user)
     courses=Course.objects.filter(student=curr_user)
+    print(courses)
     
     return render(request, 'student_courses.html',{"courses":courses})
 
@@ -87,12 +97,18 @@ def curr_classroom(request, pk):
     classroom = Classroom.objects.get(id=pk)
     courses=Course.objects.filter(classroom__id=pk)
     students=Student.objects.filter(classroom__id=pk)
-    """ print("hej")
-    curr = request.POST.get('klassnamn', None) 
-    curr_classroom=Classroom.objects.filter(name=curr)
-    print(curr_classroom)
-    #if request.is_ajax and request.method == "POST": """
-    context={'classroom':classroom, 'courses':courses,'students':students}
+    if request.method == "POST":
+        form = add_course_form(request.POST)
+        if form.is_valid():
+            chosen_courses=form.cleaned_data["courses"]
+            if len(chosen_courses)>1:
+                    for i in range(len(chosen_courses)):
+                        classroom.courses.add(chosen_courses[i])
+            else:
+                classroom.courses.add(chosen_courses[0])
+    else:
+        form=add_course_form()
+    context={'classroom':classroom, 'courses':courses,'students':students,'form':form}
     return render(request,'classroom.html',context)
 
 def add_students(request, pk):
@@ -107,15 +123,50 @@ def add_students(request, pk):
     else:
         form=add_student_form()
         student=""
-        print(form)
     
     return render(request, 'add_student.html',{"added_students":student,"form":form, "classroom":curr_classroom})
+
+def add_students_code(request, classroomid):
+    class_path="127.0.0.1:8000/profilepage/student/classroom/add/"+str(classroomid)
+    courses=Course.objects.filter(classroom__id=classroomid)
+    students=Student.objects.filter(classroom__id=classroomid)
+    curr_classroom=Classroom.objects.get(id=classroomid)
+    context={'classroom':curr_classroom, 'courses':courses,'students':students,'code':class_path}
+    return render(request, 'classroom.html',context)
+
+def add_student_to_classroom(request,pk):
+    try:
+        curr_student=Student.objects.get(user=request.user)
+        classroom=Classroom.objects.get(id=pk)
+        try: 
+            classroom.students.get(user=request.user)
+            messages.info(request,'Du är redan i klassrummet', extra_tags="added_classroom")
+            classes=Classroom.objects.filter(students=curr_student)
+        except curr_student.DoesNotExist:
+            print("hello?")
+            classroom.students.add(curr_student)
+            classroom.save()
+            try: 
+                classes=Classroom.objects.filter(students=curr_student)
+                messages.info(request, 'Du blev tillagd i klassrummet', extra_tags="added_classroom")
+            except Classroom.DoesNotExist:
+                classes=[]
+                messages.info(request, 'Klassrummet fanns inte', extra_tags="added_classroom")  
+
+    except Classroom.DoesNotExist:
+        messages.info(request, 'Klassrummet fanns inte', extra_tags="added_classroom")  
+        try:
+            classes=Classroom.objects.filter(students=curr_student)
+        except Classroom.DoesNotExist:
+            classes=[]
+        
+    
+    return render(request, 'student_classrooms.html',{'classes':classes})
+
 
 def remove_student(request, student, classroom):
     curr_student=Student.objects.get(id=student)
     curr_classroom=Classroom.objects.get(id=classroom)
-    print(curr_student)
-    print(curr_classroom)
     curr_classroom.students.remove(curr_student)
 
     courses=Course.objects.filter(classroom__id=classroom)
@@ -161,3 +212,12 @@ def t_results(request):
     teachers_students=Student.objects.filter(classroom__teacher=curr_teacher)
 
     return render(request, 'teacher_results.html',{'students':teachers_students,'classrooms':teachers_classrooms, 'courses':classroom_courses})
+
+def t_overview(request, classid, courseid):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    curr_classroom=Classroom.objects.get(id=classid)
+    curr_course=Course.objects.get(id=courseid)
+    course_chapters=Chapters.objects.filter(course=curr_course)
+    course_students=Student.objects.filter(courses=curr_course, classroom=curr_classroom)
+    visitedpages=VisitedPage.objects.all()
+    return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students,"visited":visitedpages})

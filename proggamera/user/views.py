@@ -16,18 +16,19 @@ def register(request):
     if request.method == 'POST':
         form  = RegisterForm(request.POST)
         if form.is_valid():
-            user=form.save()
+            curr_user=form.save()
             user_type=form.cleaned_data.get('user_type')
             if user_type =="T":
-                print("test?")
-                user.is_teacher=True
-                add_teacher=Teacher(user=request.user)
+                curr_user.is_teacher=True
+                curr_user.save()
+                add_teacher=Teacher(user=curr_user)
                 add_teacher.save()
             else:
-                user.is_student=True
-                add_student=Student(user=request.user)
+                curr_user.is_student=True
+                curr_user.save()
+                add_student=Student(user=curr_user)
                 add_student.save()
-            user.save()
+            
 
             messages.success(request, 'Account was created for ')
             return redirect('login')

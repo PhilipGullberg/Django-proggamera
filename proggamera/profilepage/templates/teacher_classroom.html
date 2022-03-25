@@ -17,20 +17,7 @@
     })
 </script>
 {%endblock%}
-{% block sidebar %}
-<div class="sidebar">
-        <div class="profile_info">
-            <!---->
-          <img src="https://avatars.dicebear.com/api/bottts/{{user.get_username}}.svg?mood[]=happy" class="profile_image" alt="">
-          <h4>{{user.get_username.title}}</h4>
-        </div>
-        <a href="{% url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
-        <a href="#"><i class="fas fa-cogs"></i><span>Kurser</span></a>
-        <a href="{% url 't_classroom' %}"><i class="fas fa-table"></i><span>Klassrum</span></a>
-        <a href="#"><i class="fas fa-th"></i><span>Resultat</span></a>
-        <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
-        <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
-{% endblock %}
+
 {% block content %}
 <h1>Your classrooms</h1>
 <div class="stnd-btn"><a style="text-decoration: none; color:white;" id="add_class">+ Lägg till klass</a> </div>

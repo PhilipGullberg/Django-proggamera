@@ -1,50 +1,116 @@
 {% extends 'profile_layout.html' %}
 
 
+{% block extrahead %}
+<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+{%endblock%}
+
 {% block content %}
 {%load static%}
-<div class="container topbanner ml-0 mt-4 p-3 rounded">
-  <div class="d-flex justify-content-between ">
-    <div class="d-flex flex-column w-50 pl-4 pt-1">
-      <div>
-        <h1>Läraröversikt</h1>
-      </div>
-      <div>
-        <p class="text pb-3 pt-2">Hej Lärare! Dina elever jobbar på hårt i dina kurser! Här kan du se en överblick över hur det går för dina elever, samt
-        hoppa mellan de olika delarna av att bedriva dina kurser! Ha en bra dag, och progga mera!</p>
-      </div>
-      <div class="mb-2">
-        <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;" href="{% url 't_classroom' %}">Gå till klassrum</a> </div>
+
+<div class="d-flex justify-content-evenly pb-5 w-100">
+  
+  <div class="d-flex flex-column">
+    <div class="d-flex">
+      <input class="mr-2 rounded" type="text" name="search" placeholder="Sök.." id="">
+      <button type="submit" class="btn btn border " value=""><i style="color:white" class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <div class="topbanner ml-0 mt-2 p-3 rounded">
+      <div class="d-flex justify-content-between">
+        <div class="d-flex flex-column w-75 pt-1">
+          <div>
+            <h1>Läraröversikt</h1>
+          </div>
+          <div class="pr-5">
+            <p class="text pb-3 pt-2 pr-5">Hej Lärare! Här kan du se en överblick över hur det går för dina elever i dina
+              kurser.</p>
+          </div>
+          <div class="mb-2 align-item-end">
+            <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;" href="{% url 't_classroom' %}">Gå
+                till klassrum</a> </div>
+          </div>
+        </div>
+        <div class=""><img class="w-75" src="{% static 'profilepage/standing.png'%}" alt=""></div>
       </div>
     </div>
-    <div class="pr-5"><img src="{% static 'profilepage/standing.png'%}" loading="lazy" alt=""></div>
-  </div>
-</div>
 
-<div class="container ml-2 mt-4 w-75">
-  <h2>Dina klassrum</h2>
-  <hr class="w-75 ml-0">
-  <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class">+ Ny klass</a> </div>
-  <div class="d-flex flex-wrap ">
-  {% for class in classrooms%}
-      <div class="card classcard w-25 mr-3 mt-2">
-        <div class="card-header">
-          {{class}}
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Kurser:</h5>
-          {% for course in class.courses.all %}
-          <p class="mb-0">{{course}}</p>
-          {%endfor%}
-          <p class="card-text mt-1">Antal elever: {{class.students.all|length}}</p>
+    <div class="pl-0 mt-4 ">
+      <h2>Dina klassrum</h2>
+      <hr class="h-line w-75 ml-0">
+      <div class="stnd-btn p-2 mt-0"><a style="text-decoration: none; color:white;" id="add_class" href="{% url 't_classroom' %}">+ Ny klass</a> </div>
+      <div class="d-flex flex-wrap ">
+        {% for class in classrooms%}
+        <div class="card classcard mt-2 me-3">
+          <div class="card-header">
+            {{class}}
+          </div>
+          <div class="card-body pt-2 d-flex flex-column justify-content-between">
+            <div class="pb-3">
+              {% for course in class.courses.all %}
 
-          <a href="#" class="stnd-btn ">Till kursen </a>
+              <p class="p-0 m-0">{{course}}</p>
+              {%endfor%}
+              <p class="card-text">Antal elever: {{class.students.all|length}}</p>
+            </div>
+
+
+            <div class="">
+              <a href="{% url 'curr_classroom' class.id%}" class="stnd-btn ">Till klassen </a>
+            </div>
+
+          </div>
         </div>
+        {%endfor%}
       </div>
-  {%endfor%}
+
+    </div>
   </div>
-  
+  <div>
+    <div class="vl pr-3 mt-5"></div>
+  </div>
+  <div class="right-side w-25 mt-5">
+    <div class="pl-5 pr-4 mr-5">
+      <div>
+        <div class="d-flex justify-content-between align-items-center">
+        <h2>Uppgifter</h2>
+        <div class="ml-4 "><div class="stnd-btn pr-2">+ Ny</div></div>
+        
+      </div>
+        <div >
+          <div class="">
+            {%for class in classrooms %}
+            <div class="">
+            <h6 class="pt-4">{{class}}</h6>
+              {% for course in class.courses.all %}
+                <div data-toggle="collapse" data-target="#collapse{{forloop.parentloop.counter}}{{forloop.counter}}" class="d-flex justify-content-between align-items-center"><h7 class="pr-3">{{course}} </h7> <i class="fa-solid fa-angle-down"></i> </div>
+                <div class="collapse" id="collapse{{forloop.parentloop.counter}}{{forloop.counter}}">Uppgifter</div>
+              {%endfor%}
+            </div>
+            {%endfor%}
+          </div>
+          
+        </div>
+      
+      </div>
+     
+    </div>
+    <hr class="h-line ml-4">
 </div>
+</div>
+<script src="https://jsuites.net/v4/jsuites.js"></script>
+<script>
+  jSuites.calendar(document.getElementById('calendar'), {
+    format: 'YYYY-MM-DD',
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+    monthsFull: ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'],
+    weekdays: ['Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag','Söndag'],
+    weekdays_short: ['Må', 'Ti', 'Ons', 'To', 'Fre', 'Lö', 'Sö'],
+    startingDay: '0', // Starts on Monday
+    onupdate: function(a,b) {
+        document.getElementById('calendar-value').innerText = b;
+    }
+    
+});
 
-
+</script>
 {% endblock%}

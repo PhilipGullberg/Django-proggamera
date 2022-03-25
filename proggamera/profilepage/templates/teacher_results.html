@@ -1,106 +1,162 @@
 {% extends 'profile_layout.html' %}
 
 {% block content%}
-<h1 class="py-2">Resultat</h1>
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
 
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
+
 
 <body>
+    <h3 class="py-2">Uppföljning av elevresultat</h3>
+    <div class="d-flex justify-content-between">
+        <div class="topbanner ms-0 mt-2 p-3 pr-2 w-50 rounded">
+            <div class="d-flex justify-content-between ">
+                <div class="d-flex flex-column  pl-4 pt-1">
+                    <div>
+                        <h3 class="pt-0 mt-0">Senaste uppgifter</h3>
+                    </div>
+                    <div class="pr-5">
+                        <table class=" mb-5">
+                            <tr>
+                                <th>Quiz</th>
+                                <th>Läst</th>
+                                <th>Fyll i</th>
+                            </tr>
+                            {% for classroom in classrooms %}
+                            <tr>
+                                <td>{{classroom}} :
+                                    {%for course in classroom.courses.all|slice:"1" %}
+                                    {{course}} :
+                                    {%for chap in course.chapters_set.all|slice:"1"%}
+                                    {{chap}}
+                                    {%endfor%}
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    {{classroom}} :
+                                    {%for course in classroom.courses.all|slice:"1" %}
+                                    {{course}} :
+                                    {%for chap in course.chapters_set.all|slice:"1"%}
+                                    {{chap}}
+                                    {%endfor%}
+                                    {%endfor%}
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {%for course in classroom.courses.all|slice:"1:" %}
+                                    {{classroom}} :
+                                    {{course}} :
 
-    
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#quizresultat">Quizresultat</a></li>
-            <li><a data-toggle="tab" href="#inlämningsuppgifter">Inlämningsuppgifter</a></li>
-            <li><a data-toggle="tab" href="#kapitel">Kapitel och videos</a></li>
-        </ul>
+                                    {%for chap in course.chapters_set.all|slice:"1:"%}
+                                    {{chap}}
+                                    {%endfor%}
 
-        <div class="tab-content">
-            <div id="quizresultat" class="tab-pane fade in active">
-                <h3>Quizresultat</h3>
-                <p>Här kan du se alla dina elevers quiz-resultat.</p>
-            </div>
-            <div id="inlämningsuppgifter" class="tab-pane fade">
-                <h3>Inlämningsuppgifter</h3>
-                <p>Här kan du se alla dina elevers inlämningsuppgifter.</p>
-            </div>
-            <div id="kapitel" class="tab-pane fade">
-                <h3>Kapitel och videor</h3>
-                <p>Här kan du följa vilka kapitel och videos som dina elever har sett</p>
-            </div>
-            <div id="menu3" class="tab-pane fade">
-                <h3>Menu 3</h3>
-                <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                </p>
+                                    {%endfor%}</td>
+                                <td>
+                                    {%for course in classroom.courses.all|slice:"1:" %}
+                                    {{classroom}} :
+                                    {{course}} :
+
+                                    {%for chap in course.chapters_set.all|slice:"1:"%}
+                                    {{chap}}
+                                    {%endfor%}
+
+                                    {%endfor%}
+                                </td>
+                            </tr>
+                            {%endfor%}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="mb-2 align-item-end">
+                        <div class="stnd-btn w-50"><a style="text-decoration: none; color:white;"
+                                href="{% url 't_classroom' %}">Lägg till ny uppgift</a> </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-    
-
-
-<div class="resultpage py-3">
-    {% for classroom in classrooms%}
-    <div class="classroom p-4 mb-3 mr-5 rounded">
-        {% for course in classroom.courses.all%}
-            {% for student in classroom.students.all %}
-                {% if student.quizresult_set.all%}
-                
-                {% if forloop.parentloop.first %}
-                    <h3 class="pb-2">Klass: {{classroom}}</h3>
-                {%endif%}
-                <h5 class="pb-1">{{course}}</h5> 
-                <table class="result_table">
-                    <tr>
-                        <th>Elev</th>
-                        <th>Delkapitel</th>
-                        <th>Quiz</th>
-                        <th>Svarat</th>
-                        <th>Rätt svar</th>
-                        <th>Resultat</th>
-                    </tr>
-                    
-                            {% for result in student.quizresult_set.all %}
-                          
-                                {% if result.quiz.parent.parent_chapter.course == course%}
-                                <tr>
-                                <td>{{student}}</td>
-                                <td>{{result.quiz.parent}}</td>
-                                <td>{{result.quiz}}</td>
-                                <td>{{result.answers}}</td>
-                                <td>{{result.quiz.ans}}</td>
-                                <td>{{result.result}}</td>
-                                </tr>
-                                {%endif%}
-                            {%endfor%}
-                            
-                        
-                    
-                    
-                </table>
-                {%endif%}
+        <div class="mt-0 ms-5 w-50">
+            <h3 class="text-center">Totala resultat</h3>
+            <canvas style="z-index: 9999" class="pl-5 pr-5 " id="myChart"></canvas>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap pt-5">
+        {% for classroom in classrooms%}
+            {% for course in classroom.courses.all%}
+            <div class="course-card me-4 mt-5 mb-5 rounded ">
+                <div class="d-flex flex-column">
+                    <h3 class="p-3 pl-4">{{classroom}} - {{course}}</h3>
+                    <h4 class="p-3 pl-4"><b> Aktiva uppgifter:</b></h4>
+                    <ul>
+                        <div class="d-flex justify-content-between pb-3">
+                            <li>Quiz 3.2 </li> <a class="me-3" >Se uppgift</a>
+                        </div>
+                        <div class="d-flex justify-content-between pb-3">
+                            <li> Läsa 3.1</li> <a class=" me-3" >Se uppgift</a>
+                        </div>
+                        <div class="d-flex justify-content-between pb-3">
+                            <li>Inlämningsuppgift 3.1</li> <a class=" me-3" >Se uppgift</a>
+                        </div>
+                        <div class="d-flex justify-content-between pb-3">
+                            <li>Uppgift</li> <a class=" me-3" >Se uppgift</a>
+                        </div>
+                    </ul>
+                   <div class=" mb-2 align-self-center mt-4"> <a href="{% url 'result_overview' classroom.id course.id %}"><div class="stnd-btn" >Gå till översikt</div></a> </div>
+                </div>
+            </div>
             {%endfor%}
         {%endfor%}
     </div>
-    {%endfor%}
-   
-</div>
-<script>
-    let elements = document.getElementsByClassName('classroom');
-    for(let item of elements){
-        if (item.innerText == "") {
-            item.remove();
-            console.log("empty")
-        }
-    }
     
-</script>
-{%endblock%}
+    <script>
+        const data = {
+            labels: [
+                'Red',
+                'Green',
+                'Yellow'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [20, 150, 100],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'green',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 4
+            }]
+        };
 
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {}
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    </script>
 
+    <script>
+        let elements = document.getElementsByClassName('classroom');
+        for (let item of elements) {
+            if (item.innerText == "") {
+                item.remove();
+                console.log("empty")
+            }
+        }
+    </script>
+    {%endblock%}
