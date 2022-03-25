@@ -1,4 +1,6 @@
 from pyexpat import model
+from tkinter import CASCADE
+from xmlrpc.client import boolean
 from django.db import models
 from embed_video.fields  import  EmbedVideoField
 from .fields import NonStrippingTextField
@@ -59,3 +61,19 @@ class FillInBlanksResults(models.Model):
     def __str__(self):
         return f"{self.parent}: {self.student}: result {self.result}"
         
+class VisitedPage(models.Model):
+    page=models.URLField()
+    student=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
+    subchapter=models.ForeignKey("profilepage.Subchapters", on_delete=models.CASCADE)
+    visited=models.BooleanField()
+
+    def __str__(self):
+        return f"{self.student} visited {self.subchapter}: {self.visited}"
+
+class VideoWatched(models.Model):
+    video=models.ForeignKey(Videos, on_delete=models.CASCADE)
+    student=student=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
+    watched=models.BooleanField()
+
+    def __str__(self):
+        return f"{self.student} watched {self.video}: {self.watched}"

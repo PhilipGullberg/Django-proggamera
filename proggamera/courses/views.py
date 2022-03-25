@@ -23,11 +23,14 @@ def course(request,courseid):
  """
 
 def subchapter(request,courseid,chapterid, pageid):
+    print(request.build_absolute_uri())
+    curr_student=Student.objects.get(user=request.user)
+    
     curr_course=Course.objects.get(id=courseid)
     chapters=Chapters.objects.filter(course=curr_course)
     curr_chapter=Chapters.objects.get(chapter_number=chapterid, course__id=courseid)
     subchapters=Subchapters.objects.filter(parent_chapter=curr_chapter)
-    curr_student=Student.objects.get(user=request.user)
+    
     videos=Videos.objects.filter()
     p=Paginator(subchapters,1)
     
@@ -37,9 +40,16 @@ def subchapter(request,courseid,chapterid, pageid):
         curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(int(pageid)-1))
     else:
         curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(1))
-    
+
+    if not VisitedPage.objects.filter(student=curr_student, subchapter=curr_subchapter).exists():
+        VisitedPage(student=curr_student,page=request.build_absolute_uri(), visited=True, subchapter=curr_subchapter).save()
+
     curr_fillblanks= FillInBlanks.objects.filter(subchapter=curr_subchapter)
-    student_fill_result=FillInBlanksResults.objects.filter(parent=curr_fillblanks[0],student=curr_student)
+    try:
+        student_fill_result=FillInBlanksResults.objects.filter(parent=curr_fillblanks[0],student=curr_student)
+    except IndexError:
+        student_fill_result=[]
+
     curr_quiz=Quiz.objects.filter(parent=curr_subchapter)
     if request.method == 'POST':
         answer_dic=list(request.POST.items())

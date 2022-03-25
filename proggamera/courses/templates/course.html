@@ -4,6 +4,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'courses/style.css' %}">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai.min.css">
+<script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js">
 </script>
@@ -52,7 +53,7 @@
                         {% for subchap in chapter.sub.all %}
 
                         <div class="sub-text">
-                            <p class="ms-4"><a class=""
+                            <p class="ps-4"><a class=""
                                     href="{% url 'subchapter' course.id chapter.chapter_number 1 %}?page={{forloop.counter}}">{{forloop.counter0}}.
                                     {{subchap}}</a></p>
                         </div>
@@ -90,9 +91,9 @@
         <div class="course-content pt-3 ">
             <h3><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
         </div>
-        <h5><b>{% video subchapter.video.video 'tiny' %}
-            </b></h5>
-
+        <div id="player">
+            {% video subchapter.video.video 'tiny' %}
+        </div>
         <div class=" pb-4 ">
             <p class="text-justify">{% autoescape off %}{{subchapter.content}}{% endautoescape %}</p>
         </div>
