@@ -1,8 +1,9 @@
 from queue import Empty
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from profilepage.models import *
 from django.core.paginator import Paginator
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def course(request,courseid):
@@ -10,8 +11,6 @@ def course(request,courseid):
     chapters=Chapters.objects.filter(course=curr_course)
     
     #subchapters=Subchapters.objects.filter(parent_chapter=chapters)
-    print(chapters)
-    print(curr_course)
     return render(request,"course.html", {"course":curr_course,"chapters":chapters})
 
 """ def subchapter(request,courseid, subchapterid):
@@ -23,7 +22,6 @@ def course(request,courseid):
  """
 
 def subchapter(request,courseid,chapterid, pageid):
-    print(request.build_absolute_uri())
     curr_student=Student.objects.get(user=request.user)
     
     curr_course=Course.objects.get(id=courseid)
@@ -106,11 +104,25 @@ def subchapter(request,courseid,chapterid, pageid):
     try:
         data=Quizresult.objects.filter(quiz=curr_quiz[0],students=curr_student)
         if data.exists():
-            for q in curr_quiz:
-                print(q)
             return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':data[0].result, 'num_questions':len(curr_quiz),'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
         else:
             return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
     except IndexError:
         return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
 
+def timer(request, videoid):
+    data=list(request.POST.items())
+    curr_student=Student.objects.get(user=request.user)
+    curr_video=Videos.objects.get(id=videoid)
+    student_watchtime=int(data[0][1])
+    url=data[0][0]
+    try: 
+        videowatch=VideoWatched.objects.get(video=curr_video, student=curr_student)
+        videowatch.watched=True
+        videowatch.watchtime+=student_watchtime
+        videowatch.save()
+
+    except ObjectDoesNotExist:
+        new_watchtime=VideoWatched(student=curr_student, video=curr_video, watched=True, watchtime=student_watchtime)
+        new_watchtime.save()
+    return redirect(url)

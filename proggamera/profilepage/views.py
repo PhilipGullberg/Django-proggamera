@@ -221,3 +221,11 @@ def t_overview(request, classid, courseid):
     course_students=Student.objects.filter(courses=curr_course, classroom=curr_classroom)
     visitedpages=VisitedPage.objects.all()
     return render(request, 't_result_overview.html',{"teacher":curr_teacher,"course":curr_course, "classroom":curr_classroom,"chapters":course_chapters, "students":course_students,"visited":visitedpages})
+
+def t_overview_s_detail(request, classid, courseid, studentid):
+    curr_student=Student.objects.get(id=studentid)
+    curr_class=Classroom.objects.get(id=classid)
+    curr_course=Course.objects.get(id=courseid)
+    course_chapters=Chapters.objects.filter(course=curr_course)
+    visitedpages=VisitedPage.objects.all()
+    return render(request, "t_result_s_detail.html",{"student":curr_student, "classroom":curr_class, "course":curr_course,"visited":visitedpages,"chapters":course_chapters})

@@ -33,23 +33,27 @@
     <div class="class">
         <h3>Klass: {{classroom.name}}</h3>
 
+        <div class="class-content">
+            <hr style="border-color:white;">
+            <p>Lärare: {{classroom.teacher}} </p>
+            <h4>Klassens kurser:</h4>
+            {% for course in classroom.courses.all %}
 
-        <hr style="border-color:white;">
-        <p>Lärare: {{classroom.teacher}} </p>
-        <h4>Klassens kurser:</h4>
-        {% for course in classroom.courses.all %}
+            {{course}}
+            <br>
+            {%endfor%}
+            <br>
+            <h4>Elever:</h4>
+            {% for student in classroom.students.all %}
+            <div >
+             {{student}}
+            </div>
 
-        {{course}}
-        <br>
+            
         {%endfor%}
-        <h4>Elever:</h4>
-        {% for student in classroom.students.all %}
-        {{student}}
-
-
         <br>
-        {%endfor%}
-
+        </div>
+        <div class="displaymore-btn" id="{{classroom.name}}"><button class="seemore" onclick="readmore(this)">Se mer..</button> </div>
         <hr>
         <div class="class-footer ">
             <div class="stnd-btn" type="button"><a href="{% url 'curr_classroom' classroom.id %}"
@@ -63,6 +67,45 @@
 
 {% endblock%}
 {% block endscripts %}
-
+<script>
+    var div = document.getElementsByClassName('class-content');
+    var classroomelement=document.querySelectorAll(".class h3")
+    for (let i = 0; i<div.length; i++) {
+        var hasVerticalScrollbar = div[i].scrollHeight > div[i].clientHeight;
+        
+        if (hasVerticalScrollbar){
+            let readbtns = document.getElementsByClassName('displaymore-btn');
+            let readbtnklass = "Klass: " + readbtns[i].id;
+            if(classroomelement[i].innerHTML==readbtnklass){
+                readbtns[i].style.display="block";
+                div[i].style.overflow="hidden";
+            }
+            
+            
+            
+            
+        }
+    }
+    
+   function readmore(object){
+       
+       let thing=object.parentNode.parentNode;
+       let content = thing.childNodes[3];
+       if(String(content.style.maxHeight)==="100%"){
+           content.style.maxHeight="300px";
+           thing.style.maxHeight="470px";
+           object.innerHTML="Se mer.."
+       }
+       else{
+            console.log(content.style.maxHeight);
+            thing.style.maxHeight="100%";
+            object.innerHTML="Se mindre.."
+            content.style.maxHeight="100%";
+       }
+       
+        
+    }
+    
+</script>
 <script src="https://unpkg.com/htmx.org@1.1.0"></script>
 {%endblock%}

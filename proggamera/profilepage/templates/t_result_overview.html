@@ -1,6 +1,23 @@
 {% extends 'profile_layout.html' %}
-{% block content %}
 {% load static %}
+{% block extrahead%}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="{% static 'profilepage/scripter.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/monokai.min.css">
+<script>
+    hljs.highlightAll();
+</script>
+<script>
+    hljs.initLineNumbersOnLoad();
+</script>
+{%endblock%}
+{% block content %}
+
+
 <h3 class="py-2">Översikt {{classroom}} - {{course}}</h3>
 <div class="d-flex">
     <div class="topbanner ml-0 mt-2 p-3 pr-2 mb-5 w-50 rounded">
@@ -9,67 +26,10 @@
                 <div>
                     <h3 class="pt-0 mt-0">Senaste uppgifter</h3>
                 </div>
-                <div class="pr-5">
-                    <table class="mb-5">
-                        <tr>
-                            <th>Quiz</th>
-                            <th>Läst</th>
-                            <th>Fyll i</th>
-                        </tr>
-                        <tr>
-                            <td>{{classroom}} :
-                                {%for course in classroom.courses.all|slice:"1" %}
-                                {{course}} :
-                                {%for chap in course.chapters_set.all|slice:"1"%}
-                                {{chap}}
-                                {%endfor%}
-                            </td>
-                            <td>
-                                {{classroom}} :
-                                {%for course in classroom.courses.all|slice:"1" %}
-                                {{course}} :
-                                {%for chap in course.chapters_set.all|slice:"1"%}
-                                {{chap}}
-                                {%endfor%}
-                                {%endfor%}
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {%for course in classroom.courses.all|slice:"1:" %}
-                                {{classroom}} :
-                                {{course}} :
-
-                                {%for chap in course.chapters_set.all|slice:"1:"%}
-                                {{chap}}
-                                {%endfor%}
-
-                                {%endfor%}</td>
-                            <td>
-                                {%for course in classroom.courses.all|slice:"1:" %}
-                                {{classroom}} :
-                                {{course}} :
-
-                                {%for chap in course.chapters_set.all|slice:"1:"%}
-                                {{chap}}
-                                {%endfor%}
-
-                                {%endfor%}
-                            </td>
-                        </tr>
-                        {%endfor%}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
+                <div class="pr-5">  
+                    <!-- For excercise in classroom + course -->
+                    <p>Läs kapitel 1</p>
+                    <p>Quiz i kapitel 2</p>
 
                 </div>
                 <div class="mb-2 align-item-end">
@@ -92,160 +52,197 @@
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab"
-            aria-controls="profile" aria-selected="false">Quizresultat</button>
+            aria-controls="profile" aria-selected="false" href="#quiz">Quizresultat</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#inlämning" type="button"
-            role="tab" aria-controls="contact" aria-selected="false">Inlämningsuppgifter</button>
+            role="tab" aria-controls="contact" aria-selected="false">Fill in the blanks</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#kapitel" type="button"
             role="tab" aria-controls="contact" aria-selected="false">Kapitel och videos</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#kapitel" type="button"
+            role="tab" aria-controls="contact" aria-selected="false">Läxa</button>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="allt" role="tabpanel" aria-labelledby="home-tab">
         <div class="resultpage py-3">
             <h4 class="pb-3">Här kan du se all data på dina elevers framsteg.</h4>
-            <a class="btn bg-light mb-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <a class="btn bg-light mb-2" data-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
                 Klicka här för mer info om vad tabellen visar
-              </a>
-              <div class="collapse " id="collapseExample">
+            </a>
+            <div class="collapse " id="collapseExample">
                 <div class="card-body mb-3 bg-light text-dark">
                     <h3 class="mb-3">Vad betyder ikonerna?</h3>
                     <div class="d-flex justify-content-between">
                         <div class="pe-4 ps-3 ">
                             <h5>Quiz</h5>
-                            
+
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon me-2 bg-dark" src="{%static 'profilepage/icquiznullwhite.png' %}"></img><p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
+                                <img class="quiz-icon me-2 bg-dark"
+                                    src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img><p class="m-0">Innebär att eleven har klarat quizet</p>
-                            </div>   
-                            <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img><p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                <p class="m-0">Innebär att eleven har klarat quizet</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img><p class="m-0">Innebär att kapitlet har ett quiz</p>
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                <p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz</p>
                             </div>
                         </div>
                         <div class="me-5 pe-5">
-                            <h5 >Fill in the blanks</h5>
-                            
+                            <h5>Fill in the blanks</h5>
+
                             <div class="d-flex align-items-center">
-                                <i  class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the blanks och eleven inte gjort det</p>
-                            </div>   
+                                <i class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the
+                                blanks och eleven inte gjort det</p>
+                            </div>
                             <div class="d-flex align-items-center">
-                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat fill in the blanks</p>
-                            </div>   
+                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat
+                                fill in the blanks</p>
+                            </div>
                             <div class="d-flex align-items-center">
-                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har klarat fill in the blanks</p>
-                            </div>   
+                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har
+                                klarat fill in the blanks</p>
+                            </div>
                         </div>
-                       
+
                     </div>
                     <div class="d-flex justify-content-between mt-4">
                         <div class="pe-4 ps-3 ">
                             <h5>Kollat video</h5>
-                            
+
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon me-2 bg-dark" src="{%static 'profilepage/icquiznullwhite.png' %}"></img><p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
+                                <img class="quiz-icon me-2 bg-dark"
+                                    src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img><p class="m-0">Innebär att eleven har klarat quizet</p>
-                            </div>   
-                            <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img><p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                <p class="m-0">Innebär att eleven har klarat quizet</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img><p class="m-0">Innebär att kapitlet har ett quiz</p>
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                <p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz</p>
                             </div>
                         </div>
                         <div class="me-5 pe-5">
-                            <h5 >Läst kapitel</h5>
-                            
+                            <h5>Läst kapitel</h5>
+
                             <div class="d-flex align-items-center">
-                                <i  class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the blanks och eleven inte gjort det</p>
-                            </div>   
+                                <i class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the
+                                blanks och eleven inte gjort det</p>
+                            </div>
                             <div class="d-flex align-items-center">
-                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat fill in the blanks</p>
-                            </div>   
+                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat
+                                fill in the blanks</p>
+                            </div>
                             <div class="d-flex align-items-center">
-                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har klarat fill in the blanks</p>
-                            </div>   
+                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har
+                                klarat fill in the blanks</p>
+                            </div>
                         </div>
                     </div>
-                  
+
                 </div>
-              </div>
-            
-            <div class="table-responsive">
-                <table class="table">
-                    <tr >
-                        <th cope="col">Elev/Kapitel</th>
-                        {%for chapter in chapters %}
-                        {% for subchapter in chapter.sub.all%}
-                        <th cope="col">{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
-                        {%endfor%}
-                        {%endfor%}
-                    </tr>
+            </div>
+
+            <div class=" mb-5 me-5">
+                <table class="table " id="all_table">
+                    <thead>
+                        <tr>
+                            <th>Elev/Kapitel</th>
+                            {%for chapter in chapters %}
+                            {% for subchapter in chapter.sub.all%}
+                            <th>{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
+                            {%endfor%}
+                            {%endfor%}
+                        </tr>
+                    </thead>
 
                     {% for student in students %}
                     <tr>
-                        <th scope="row">{{student}}</th>
+                        <th><a href="{% url 'result_detail' classroom.id course.id student.id %}">{{student}}</a> </th>
 
                         {%for chapter in chapters %}
-                            {% for subchapter in chapter.sub.all%}
-                            <td >
-                            <div class="d-flex align-items-center ">
+                        {% for subchapter in chapter.sub.all%}
+                        <td>
+                            <div class="d-flex align-items-center gap-2 ">
                                 <!-- Code to show results of quizes-->
-                                <div class="quiz-data me-2">
+                                <div class="quiz-data">
                                     {% if subchapter.quiz_set.all %}
-                                        {% for quizresult in subchapter.quiz_set.all.first.quizresult_set.all%}
-                                            {% if student == quizresult.students%}
-                                                {% if quizresult.result == 1 %}
-                                                    <img class="quiz-icon" src="{%static 'profilepage/icquiz.png' %}"></img>   
-                                                {%else%}
-                                                    <img class="quiz-icon" src="{%static 'profilepage/icquizwrong.png' %}"></img>
-                                                {%endif%}
-                                            {%endif%}
-                            
-                                        {%endfor%}
-                                        <img id="iconnull" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
-                                   
+                                    {% for quizresult in subchapter.quiz_set.all.first.quizresult_set.all%}
+                                    {% if student == quizresult.students%}
+                                    {% if quizresult.result == 1 %}
+                                    <img class="quiz-icon" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                    {%else%}
+                                    <img class="quiz-icon" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                    {%endif%}
+                                    {%endif%}
+
+                                    {%endfor%}
+                                    <img id="iconnull" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+
                                     {%endif%}
                                 </div>
-                                <div class="fill-data me-2">
+                                <div class="fill-data ">
                                     <!--Code to show results for fillinblanks-->
                                     {% if subchapter.fillinblanks_set.all %}
-                                        {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
-                                            {% if student == fillresult.student %}
-                                                {% if fillresult.result == 1 %}
-                                                    <i id="right" class="fill fa-brands fa-wpforms"></i>
-                                                {%else%}
-                                                    <i id="wrong" class="fill fa-brands fa-wpforms"></i>
-                                                {%endif%}
-                                            {%endif%}
-                                        {%endfor%}
-                                        <i class="fa-brands fa-wpforms"></i>
+                                    {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
+                                    {% if student == fillresult.student %}
+                                    {% if fillresult.result == 1 %}
+                                    <i id="right" class="fa-brands fa-wpforms"></i>
+                                    {%else%}
+                                    <i id="wrong" class="fa-brands fa-wpforms"></i>
+                                    {%endif%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    <i class="fa-brands fa-wpforms"></i>
 
-                                    
+
                                     {%endif%}
                                 </div>
-                                <div class="read-data me-2">
+                                <div class="read-data">
                                     {% for page in visited %}
-                                        {% if student == page.student %}
-                                            {% if page.subchapter == subchapter %}
-                                                <i id="right" class="fa-solid fa-book"></i>
-                                            {%endif%}
-                                        {%endif%}
+                                    {% if student == page.student %}
+                                    {% if page.subchapter == subchapter %}
+                                    <i id="right" class="fa-solid fa-book"></i>
+                                    {%endif%}
+                                    {%endif%}
                                     {%endfor%}
                                     <i style="color:white" class="fa-solid fa-book"></i>
                                 </div>
+                                <div class="video-data">
+
+                                    {% if subchapter.video %}
+                                    {% if student == subchapter.video.videowatched_set.all.first.student %}
+                                    <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                    {%else%}
+
+                                    <img src="{% static 'profilepage/icon-video.png'%}">
+                                    {%endif%}
+
+                                    {%endif%}
+
+
+                                </div>
                             </div>
                             {%endfor%}
-                            </td>
+                        </td>
                         {%endfor%}
                     </tr>
                     {%endfor%}
@@ -256,84 +253,285 @@
     <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="profile-tab">
         <div class="resultpage py-3">
             <div class="classroom p-4 mb-3 mr-5 rounded">
-                
+
                 <h5 class="pb-1">{{course}}</h5>
-                <table class="sortable result_table">
-                    <tr>
-                        <th>Elev</th>
-                        <th>Delkapitel</th>
-                        <th>Quiz</th>
-                        <th>Svarat</th>
-                        <th>Rätt svar</th>
-                        <th>Resultat</th>
-                    </tr>
-                    {% for student in students%}
-                        {% for result in student.quizresult_set.all %}
-            
-                            {% if result.quiz.parent.parent_chapter.course == course%}
-                            <tr>
-                                <td>{{student}}</td>
-                                <td>{{result.quiz.parent}}</td>
-                                <td>{{result.quiz}}</td>
-                                <td>{{result.answers}}</td>
-                                <td>{{result.quiz.ans}}</td>
-                                <td>{{result.result}}</td>
-                            </tr>
-                            {%endif%}
-                        {%endfor%}
+                <table class="table" id="quiz_table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" colspan="1">Elev</th>
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                    <th colspan="4">{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
+                                    
+                                {%endfor%}
+                            {%endfor%}
+                            
+                        </tr>
+                        <tr>
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                    <th >Quiz</th>
+                                    <th >Svarat</th>
+                                    <th >Rätt svar</th>
+                                    <th >Resultat</th>
+                                
+                                {%endfor%}
+                            {%endfor%}
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{student}}</td>
+
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                                {% for quizresult in subchapter.quiz_set.all.first.quizresult_set.all%}
+                                                    {% if student == quizresult.students%}
+                                                            <td >{{quizresult.quiz}}</td>
+                                                            <td>{{quizresult.answers}}</td>
+                                                            <td>{{quizresult.quiz.ans}}</td>
+                                                            <td id="hasquiz">
+                                                            {% if quizresult.result == 1%}
+                                                                1
+                                                                <i id="right" class="fa-solid fa-check ps-1"></i>
+                                                            {%else%}
+                                                            0
+                                                            <i  id="wrong" class="fa-solid fa-xmark ps-1"></i>
+                                                            {%endif%}
+                                                            </td>
+
+                                                    {%endif%}
+                                                    
+                                                {%endfor%}
+                                            
+
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    
+
+                                {%endfor%}
+                            {%endfor%}
+                                
+                        </tr>
                     {%endfor%}
-        
-        
-        
-        
+                </tbody>
+                       
+
                 </table>
 
-              
+
             </div>
-        
+
         </div>
     </div>
     <div class="tab-pane fade" id="inlämning" role="tabpanel" aria-labelledby="contact-tab">
-        <p>Här kan du se alla dina elevers inlämningsuppgifter.</p>
+        <h3>Här kan du se alla dina elevers fill in the blanks.</h3>
+
+        <div class="resultpage py-3">
+            <div class="classroom p-4 mb-3 mr-5 rounded">
+
+                <h5 class="pb-1">{{course}}</h5>
+                <table class="table" id="quiz_table">
+                    <thead>
+                        <tr>
+                            <th >Elev</th>
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                    <th >{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
+                                    
+                                {%endfor%}
+                            {%endfor%}
+                            
+                        </tr>
+                       
+
+                       
+                    </thead>
+                    <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{student}}</td>
+                            
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                    {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
+                                        
+                                        {% if student == fillresult.student %}
+                                        
+                                            {% if fillresult.result == 1 %}
+
+                                            <td id="hasfill">
+                                                <div class="d-flex align-items-center">
+                                                    <i id="right" class="fill fa-brands fa-wpforms"></i>
+                                                    
+                                                    <button type="button" class="btn btn-link " data-bs-toggle="modal" data-bs-target="#exampleModal{{subchapter}}{{student}}">
+                                                        Rätt 
+                                                    </button>
+                                                </div>
+                                               </td>
+                                            {%else%}
+                                            <td id="hasfill"> 
+                                                <div class="d-flex align-items-center">
+                                                    <i id="wrong" class="fill fa-brands fa-wpforms"></i>
+                                                    
+                                                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal{{subchapter}}{{student}}">
+                                                        Fel 
+                                                    </button>
+                                                </div>
+                                                </td>
+                                            {%endif%}
+                                        {%endif%}
+                                    {%endfor%}
+                                   <td><i class=" fill fa-brands fa-wpforms"></i></td>
+
+                                    
+                                  <div class="modal fade text-dark" id="exampleModal{{subchapter}}{{student}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">{{subchapter.fillinblanks_set.first}} - {{student}}</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          {% if subchapter.fillinblanks_set.first%}
+                                          <div class="fill-in-the-blank p-3 mb-3 rounded ">
+                                            <h3>Fyll i resterande kod: {{subchapter.fillinblanks_set.first.title}}</h3>
+                                            <p>{{subchapter.fillinblanks_set.first.description}}</p>
+                                            <div class="fill-in-part p-3 rounded text-light">
+                                                <div class="input">
+                                
+                                                    {% for task in student.fillinblanksresults_set.all %}
+                        
+                                                        {% if task.parent == subchapter.fillinblanks_set.first %}
+                                                            <div class="code-text ">{{subchapter.fillinblanks_set.first.code_before}}
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="code-text">{{subchapter.fillinblanks_set.first.code_on_input_line_before}}</div>
+                                        
+                                        
+                                                                <form class="d-flex align-items-center" hx-post="" hx-swap="innerHTML" hx-target="#result">
+                                                                    {%csrf_token%}
+        
+                                                                
+                                                                            
+                                                                                <input readonly class="input-field" id="fill-in-1" type="text" name="user_input"
+                                                                                    size="{{subchapter.fillinblanks_set.first.input_length}}" {%  if student.fillinblanksresults_set.first.answer %}
+                                                                                    value="{{student.fillinblanksresults_set.first.answer}}" {%else %} placeholder="Svar" {%endif%}>
+                                                    
+                                                                                <input readonly class="input-field" id="answer" type="hidden" value="{{fill_in_blank.answer}}">
+                                                                                
+                                                                                <div class="code-text">{{subchapter.fillinblanks_set.first.code_on_input_line_after}}</div>
+                                                                        
+                                                                
+                                                                    
+                                                            </div>
+                                                            <div class="code-text ">{{subchapter.fillinblanks_set.first.code_after}}</div>
+                                                            
+                                        
+                                                            <div class="pt-3 pr-2 mt-5 d-flex justify-content-between">
+                                                                <div>
+                                                                
+                                                                </div>
+                                                                <div id="result" class="ms-2">
+                                                                    {%if task.result == 1 %}
+                                                                    <i class="fa-solid fa-circle-check fa-2xl align-self-end"></i>
+                                                                    {%else%}
+                                                                    <i class="fa-solid fa-circle-xmark fa-2xl align-self-end"></i>
+                                                                    {%endif%}
+                                                                </div>
+                                                            </div>
+                                                            </form>
+                                                    {%endif%}
+                                                    
+                                                    {%endfor%}
+                                                </div>
+                                
+                                                <div>
+                                                    <h6>Hint:</h6>
+                                                    <p>{{subchapter.fillinblanks_set.first.hint}}</p>
+                                                </div>
+                                                <div >
+                                                    <h6>Svar:</h6>
+                                                    <p>{{subchapter.fillinblanks_set.first.answer}}</p>
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                        {%else%}
+                                        <div>
+                                            Finns inget fill in blanks för detta kapitel ännu 
+                                        </div>
+                                        {%endif%}
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  
+                                {%endfor%}
+                            {%endfor%}
+                        </td>
+                        </tr>
+                        
+                    {%endfor%}
+                </tbody>
+                       
+
+                </table>
+                
+                
+
+            </div>
+
+        </div>
     </div>
     <div class="tab-pane fade" id="kapitel" role="tabpanel" aria-labelledby="contact-tab">
-        <p>Här kan du följa vilka kapitel och videos som dina elever har sett</p>
+        <h3>Här kan du följa vilka kapitel och videos som dina elever har sett</h3>
     </div>
 </div>
 
 
 
 
+<link href="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.css" rel="stylesheet">
 
-
+<script src="https://unpkg.com/bootstrap-table@1.19.1/dist/bootstrap-table.min.js"></script>
+<script
+    src="https://unpkg.com/bootstrap-table@1.19.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js">
+</script>
 <script>
-    window.addEventListener('DOMContentLoaded',function(){
-        var quizdata= document.querySelectorAll(".quiz-data");
-        for(let i=0; i<quizdata.length;i++){
-            for(let j=0; j<quizdata[i].children.length;j++){
-                if(quizdata[i].children[j].className=="quiz-icon"){
-                    quizdata[i].children[j+1].remove();
-                    
+    window.addEventListener('DOMContentLoaded', function () {
+        var quizdata = document.querySelectorAll(".quiz-data");
+        for (let i = 0; i < quizdata.length; i++) {
+            for (let j = 0; j < quizdata[i].children.length; j++) {
+                if (quizdata[i].children[j].className == "quiz-icon") {
+                    quizdata[i].children[j + 1].remove();
+
                 }
             }
         }
-        var filldata= document.querySelectorAll(".fill-data");
-        for(let i=0; i<filldata.length;i++){
-            for(let j=0; j<filldata[i].children.length;j++){
-                console.log(filldata[i].children[j]);
-                if(filldata[i].children[j].id=="right" || filldata[i].children[j].id=="wrong" ){
-                    filldata[i].children[j+1].remove();
-                    
+        var filldata = document.querySelectorAll(".fill-data");
+        for (let i = 0; i < filldata.length; i++) {
+            for (let j = 0; j < filldata[i].children.length; j++) {
+                if (filldata[i].children[j].id == "right" || filldata[i].children[j].id == "wrong") {
+                    filldata[i].children[j + 1].remove();
+
                 }
             }
         }
-        var bookdata= document.querySelectorAll(".read-data");
-        for(let i=0; i<bookdata.length;i++){
-            for(let j=0; j<bookdata[i].children.length;j++){
-                console.log(bookdata[i].children[j]);
-                if(bookdata[i].children[j].id=="right"){
-                    bookdata[i].children[j+1].remove();
-                    
+        var bookdata = document.querySelectorAll(".read-data");
+        for (let i = 0; i < bookdata.length; i++) {
+            for (let j = 0; j < bookdata[i].children.length; j++) {
+                if (bookdata[i].children[j].id == "right") {
+                    bookdata[i].children[j + 1].remove();
+
                 }
             }
         }

@@ -51,21 +51,23 @@ $(document).ready(function () {
         
         
     });
-    let answer_button=document.querySelector(".fill-in-answer");
+    let answer_button=document.querySelector("#input-field");
     if(answer_button!=null){
-        answer_button.addEventListener("click", function(){
-            var input_value = document.getElementById("fill-in-1").value;
-            var answer_value=document.getElementById("answer").value;
-            if(input_value==answer_value){
-                let congrats_vid = document.querySelector(".congrats");
-                congrats_vid.style.display="block";
-                let vid = document.querySelector(".player");
-                vid.play();
-                setTimeout(function(){
-                    congrats_vid.style.display="none";
-                
-                },1500);
-                
+        answer_button.addEventListener("keyup", function(e){
+            if (e.key === 'Enter') {
+                var input_value = document.getElementById("fill-in-1").value;
+                var answer_value=document.getElementById("answer").value;
+                if(input_value==answer_value){
+                    let congrats_vid = document.querySelector(".congrats");
+                    congrats_vid.style.display="block";
+                    let vid = document.querySelector(".player");
+                    vid.play();
+                    setTimeout(function(){
+                        congrats_vid.style.display="none";
+                    
+                    },1500);
+                    
+                }
             }
         });
     }
@@ -102,7 +104,9 @@ $(document).ready(function () {
         var match = url.match(regExp);
         return (match&&match[7].length==11)? match[7] : false;
     }
-    
+    var timer = document.querySelector("#timer");
+    let timerform = document.querySelector(".timerform");
+    let timerformsubmit=document.querySelector("#timerformsubmit");
     var iframen=document.querySelector("iframe");
     iframen.id="videoplayer";
     iframe_videoID=youtube_parser(iframen.src);
@@ -128,13 +132,23 @@ $(document).ready(function () {
     }
     function onPlayerReady(event) {
        
-        event.target.playVideo();
+        console.log("Player ready")
     }
+    let timewatched=0;
     function onPlayerStateChange(event) {
+
         if(event.data==1){
-            console.log("playing");
+            startTime = new Date();
+
         }
-        console.log(event.data)
+        else if(event.data==2){
+            endTime = new Date();
+            timed=endTime-startTime;
+            timed=timed/1000;
+            timewatched= timewatched + Math.round(timed);
+            timer.value=timewatched;
+            timerformsubmit.click();
+        }
     }
    
     onYouTubeIframeAPIReady()
