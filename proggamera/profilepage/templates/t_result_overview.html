@@ -63,7 +63,7 @@
             role="tab" aria-controls="contact" aria-selected="false">Kapitel och videos</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#kapitel" type="button"
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#excercise" type="button"
             role="tab" aria-controls="contact" aria-selected="false">Läxa</button>
     </li>
 </ul>
@@ -176,7 +176,7 @@
 
                     {% for student in students %}
                     <tr>
-                        <th><a href="{% url 'result_detail' classroom.id course.id student.id %}">{{student}}</a> </th>
+                        <th ><a href="{% url 'result_detail' classroom.id course.id student.id %}">{{student}}</a> </th>
 
                         {%for chapter in chapters %}
                         {% for subchapter in chapter.sub.all%}
@@ -229,13 +229,14 @@
                                 <div class="video-data">
 
                                     {% if subchapter.video %}
-                                    {% if student == subchapter.video.videowatched_set.all.first.student %}
-                                    <img src="{% static 'profilepage/icon-video-green.png'%}">
-                                    {%else%}
-
-                                    <img src="{% static 'profilepage/icon-video.png'%}">
-                                    {%endif%}
-
+    
+                                        {% for video in subchapter.video.videowatched_set.all %}
+                                        
+                                            {% if student == video.student %}
+                                            <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                            {%endif%}
+                                        {%endfor%}
+                                        <img src="{% static 'profilepage/icon-video.png'%}">
                                     {%endif%}
 
 
@@ -251,6 +252,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="profile-tab">
+        <h4 class="py-3 pb-3">Här kan du följa vilka quiz som dina elever har gjort</h4>
         <div class="resultpage py-3">
             <div class="classroom p-4 mb-3 mr-5 rounded">
 
@@ -258,7 +260,7 @@
                 <table class="table" id="quiz_table">
                     <thead>
                         <tr>
-                            <th rowspan="2" colspan="1">Elev</th>
+                            <th  rowspan="2" colspan="1">Elev</th>
                             {%for chapter in chapters %}
                                 {% for subchapter in chapter.sub.all%}
                                     <th colspan="4">{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
@@ -283,7 +285,7 @@
                     <tbody>
                     {% for student in students %}
                         <tr>
-                            <td>{{student}}</td>
+                            <td >{{student}}</td>
 
                             {%for chapter in chapters %}
                                 {% for subchapter in chapter.sub.all%}
@@ -329,7 +331,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="inlämning" role="tabpanel" aria-labelledby="contact-tab">
-        <h3>Här kan du se alla dina elevers fill in the blanks.</h3>
+        <h4 class="py-3 pb-3">Här kan du se alla dina elevers fill in the blanks.</h4>
 
         <div class="resultpage py-3">
             <div class="classroom p-4 mb-3 mr-5 rounded">
@@ -338,7 +340,7 @@
                 <table class="table" id="quiz_table">
                     <thead>
                         <tr>
-                            <th >Elev</th>
+                            <th  >Elev</th>
                             {%for chapter in chapters %}
                                 {% for subchapter in chapter.sub.all%}
                                     <th >{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
@@ -493,7 +495,74 @@
         </div>
     </div>
     <div class="tab-pane fade" id="kapitel" role="tabpanel" aria-labelledby="contact-tab">
-        <h3>Här kan du följa vilka kapitel och videos som dina elever har sett</h3>
+        <h4 class="pt-3 pb-3">Här kan du följa vilka kapitel och videos som dina elever har sett</h4>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    {%for chapter in chapters %}
+                        {% for subchapter in chapter.sub.all%}
+                            <th >{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}}</th>
+                            
+                        {%endfor%}
+                    {%endfor%}
+                </tr>
+            </thead>
+            <tbody>
+               
+                {% for student in students%}
+                <tr>
+                    <td>{{student}}</td>
+                    {%for chapter in chapters %}
+                        {% for subchapter in chapter.sub.all%}
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="read-data solo">
+                                    {% for page in visited %}
+                                    {% if student == page.student %}
+                                    {% if page.subchapter == subchapter %}
+                                <i id="right" class="fa-solid fa-book"></i>
+                                    {%endif%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    <i style="color:white" class="fa-solid fa-book"></i>
+                                </div>
+                                <div class="video-data">
+
+                                    {% if subchapter.video %}
+                                    
+                                        {% for video in subchapter.video.videowatched_set.all %}
+                                        
+                                            {% if student == video.student %}
+                                            <img class="hasseen" id="seensolo" src="{% static 'profilepage/icon-video-green.png'%}">
+                                            {% for video in student.videowatched_set.all %}
+                                                {%if video.video == subchapter.video%}
+                                                    Tid: {{video.watchtime}}s
+                                                {%endif%}
+                                            {%endfor%}
+                                            
+                                            {%endif%}
+                                        {%endfor%}
+                                        <img id="seensolo" src="{% static 'profilepage/icon-video.png'%}">
+
+                                    {%endif%}
+
+
+                                </div>
+                            </div>
+                        </td>
+                        {%endfor%}
+                    {%endfor%}
+                
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-pane fade" id="excercise" role="tabpanel" aria-labelledby="excercises-tab">
+        <h3>Här kan du följa vilka uppgifter som dina elever har gjort</h3>
     </div>
 </div>
 

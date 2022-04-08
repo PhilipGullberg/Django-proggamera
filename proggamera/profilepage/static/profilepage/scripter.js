@@ -1,5 +1,17 @@
 $(document).ready( function () {
     
+
+    
+
+
+
+    let videoelement=document.querySelectorAll('.video-data');
+
+    for (let i =0; i <videoelement.length; i++){
+        if (videoelement[i].childElementCount>1){
+            videoelement[i].lastElementChild.remove();
+        }
+    }
    
     
     let codetext = document.querySelectorAll('.code-text');
@@ -12,19 +24,20 @@ $(document).ready( function () {
         
     });
     
-    let hasfilldata = document.querySelectorAll("#hasquiz");
-    for(let j=0; j<=hasfilldata.length-1;j++){
+    /* If element has quiz, removes all other childs */
+    let hasquizdata = document.querySelectorAll("#hasquiz");
+    for(let j=0; j<=hasquizdata.length-1;j++){
         for(let i=0; i<=3; i++){
-            let curr_element= hasfilldata[j].nextElementSibling;
-            console.log(curr_element);
+            let curr_element= hasquizdata[j].nextElementSibling;
             curr_element.remove();
             
         }
 
     }
-    let hasscriptdata = document.querySelectorAll("#hasfill");
-    for(let j=0; j<=hasscriptdata.length-1;j++){
-        let curr_element= hasscriptdata[j].nextElementSibling;
+    /* If element has fill, removes all other childs */
+    let hasfilldata = document.querySelectorAll("#hasfill");
+    for(let j=0; j<=hasfilldata.length-1;j++){
+        let curr_element= hasfilldata[j].nextElementSibling;
         curr_element.remove();
          
         
@@ -35,9 +48,14 @@ $(document).ready( function () {
         {
         scrollX:true,
         "order": [[ 0, "asc" ]],
-        "autoWidth": false,
-    }
+
+        }
     );
+    $('button[data-bs-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+        console.log("changed tab")
+        $($.fn.dataTable.tables( true ) ).css('width', '100%');
+        $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
+    } );
     const data = {
         labels: [
             'Red',
@@ -65,4 +83,6 @@ $(document).ready( function () {
         document.getElementById('myChart'),
         config
     );
+    
+
 });

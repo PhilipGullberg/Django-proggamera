@@ -179,7 +179,6 @@ body{
 .table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 80%;
   margin-bottom:2%;
   
 }
@@ -250,7 +249,6 @@ hr{
   color:black !important;
 }
 .table{
-  width:100% !important;
   overflow-x: auto;
   color:White !important;
 
@@ -272,9 +270,16 @@ hr{
 }
 .table{
   white-space:nowrap;
+  width:100% !important;
 }
 .fa-book#right{
   color: #03BA15;
+}
+#seensolo{
+  width:24px;
+}
+.solo .fa-book{
+  font-size:18px;
 }
 #right{
   color: #03BA15;;

@@ -72,7 +72,7 @@ class VisitedPage(models.Model):
 
 class VideoWatched(models.Model):
     video=models.ForeignKey(Videos, on_delete=models.CASCADE)
-    student=student=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
+    student=models.ForeignKey("profilepage.Student", on_delete=models.CASCADE)
     watchtime=models.IntegerField()
     watched=models.BooleanField()
 
