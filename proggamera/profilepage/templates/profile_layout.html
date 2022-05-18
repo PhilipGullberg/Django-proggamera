@@ -77,8 +77,9 @@
         {% if user.is_teacher %}
             <a href="{%url 'teacher_dash' %}"><i class="fas fa-desktop"></i><span>Översikt</span></a>
             <a href="{%url 't_classroom' %}"><i class="fas fa-cogs"></i><span>Klassrum</span></a>
-            <a href="#"><i class="fas fa-table"></i><span>Kurser</span></a>
+            <a href="{% url 't_excercises' %}"><i class="fas fa-table"></i><span>Uppgifter</span></a>
             <a href="{%url 't_results' %}"><i class="fas fa-th"></i><span>Uppföljning</span></a>
+            <a href="#"><i class="fas fa-table"></i><span>Kurser</span></a>
             <a href="#"><i class="fas fa-info-circle"></i><span>Guide</span></a>
             <a href="#"><i class="fas fa-cog  "></i><span>Inställningar</span></a>
         {%else%}

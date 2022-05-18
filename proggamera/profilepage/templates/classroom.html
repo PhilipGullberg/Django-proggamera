@@ -1,6 +1,7 @@
 {% extends 'profile_layout.html' %}
 
 {% block content%}
+{% load static %}
 <script>
     $(document).ready(function () {
         $('#add_class_form').hide()
@@ -9,63 +10,343 @@
         });
     });
 </script>
-<div class=" pl-5 pt-3 pb-3  container">
-    <div class="stnd-btn" type="button"><a href="{% url 't_classroom' %}" style="text-decoration: none; color:white;">
-            <i class="fas fa-arrow-left"></i> Gå tillbaks</a></div>
 
-    <h1 class="mt-3">Klass: {{classroom.name}}</h1>
-    <div class="courses">
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="col-sm-8">
+        <div class="d-flex align-items-center justify-content-between">
+            <h3 class="mt-3">{{classroom.name}} - {{course}}</h3>
+            <i class="fa-solid fa-gear fa-xl pt-3"></i>
+        </div>
         <hr>
-        <h3>Kurser: </h3>
-        <ul>
-            {% for course in courses %}
-            <li>{{course}}</li>
-            {%endfor%}
-        </ul>
-        <div class="stnd-btn" type="button" id="add_class"><a style="text-decoration: none; color:white;">+ Lägg till kurs</a></div>
-        <div id="add_class_form">
-            <form action="" method="POST">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Submit">
-            </form>
-        </div>
     </div>
-    <div class="students mt-3">
-        <h3>Elever:</h3>
-        <ul>
-            {% for student in students %}
-            <li>{{student}}<a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2">  x</span></a> </li>
-            
-            {%endfor%}
-        </ul>
-        <div class="d-flex">
-            <div class="stnd-btn" id="add_btn" type="button" id="#add">
-                <a  href="{% url 'add_students' classroom.id %}" style="text-decoration:none; color:white;">+ Lägg till elever</a></div>
-            </div>
-            {% if code %}
-            <input type="text" id="invite" value="{{code}}"> 
-            <button onclick="copy()">Kopiera</button>
-            {%else%}
-            <div class="stnd-btn" id="add_btn" type="button" id="#add">
-                <a  href="{% url 'add_students_code' classroom.id %}" style="text-decoration:none; color:white;">+ Skicka en inbjudningskod</a></div>
-            </div>
-            {%endif%}
-        </div>
-        
-    
-    
+    <div class="col-sm-4 text-center">
+        <button class="go-button position-relative">
+            <a class="no-link stretched-link" href="">Gå till kursen <i class="fas fa-arrow-right ps-3"></i> </a>
+        </button>
+    </div>
 
 </div>
+<div class="d-flex gap-5 flex-wrap pb-3">
+    <div class="student_card d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="col-sm-8">
+                <h4><b>Elever</b></h4>
+
+            </div>
+            <div class="dropdown">
+
+                <div class="icon_drop" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    <i class=" fa-solid fa-ellipsis-vertical fa-xl me-0"></i>
+                </div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" data-toggle="modal" data-target="#addstudentmodal" href="">Bjud in
+                        elever</a>
+                    <a class="dropdown-item" data-toggle="modal" data-target="#editstudentmodal" href="">Redigera
+                        elever</a>
+                    <a class="dropdown-item" href="#">Lägg till licenser</a>
+                </div>
+            </div>
+
+        </div>
+        <hr>
+        <div class="d-flex-column">
+            {% for student in students %}
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="m-0 p-0">{{student}}</p>
+                <i class="pe-2 fas fa-regular fa-check"></i>
+            </div>
+
+            <!-- <a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2">  x</span></a> </li> -->
+
+            {%endfor%}
+        </div>
+
+    </div>
+
+    <!-- Add student modal -->
+    <div class="modal fade" id="addstudentmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Lägg till elever</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Du kan lägga till elever på tre sätt.</p>
+                    <ol>
+                        <li>Du kan lägga till elever du har i andra klasser manuellt genom att söka</li>
+                        <li>Du kan lägga till elever genom att ge de en kod de skriver in i sin klassrumsvy</li>
+                        <li>Du kan lägga till elever genom att ge de en länk som tar de till klassrummet och lägger till
+                            de</li>
+                    </ol>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">Manuellt</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                aria-controls="profile" aria-selected="false">Kurskod</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                                aria-controls="contact" aria-selected="false">Kurslänk</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="mt-3 ps-3">
+                                <div id="add_student_form">
+
+                                        <input class="form-control" type="search" 
+                                            name="search" placeholder="Sök elev här..." 
+                                            hx-post="{% url 'search_students' classroom.id %}" 
+                                            hx-trigger="keyup changed delay:500ms, search" 
+                                            hx-target="#search-results" 
+                                        >
+                                        <br>
+                                        <br>
+                                    <div id="search-results">
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="mt-3 ps-3">
+                                <b> Be eleverna skriva in denna kod i sin klassrumsvy</b>
+                                <br>
+                                <input type="text" value="{{course.id}}"> <button onclick="copy()">Kopiera</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                            <div class="mt-3 ps-3">
+                                <b>Kopiera och ge denna länk till eleverna, så kopplas de automatiskt till
+                                    klassrummet</b>
+                                <input type="text" id="invite" value="{{code}}">
+
+                                <button onclick="copy()">Kopiera</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- edit student modal -->
+    <div class="modal fade" id="editstudentmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Redigera elever</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Här kan du ta bort elever etc.</p>
+                    <div>
+                        <div class="d-flex-column">
+                            
+                            <table class="col-sm-12">
+                                <tr>
+                                    <th>Namn</th>
+                                    <th>Mail</th>
+                                    <th>Licensstatus</th>
+                                    <th>Ta bort</th>
+                                </tr>
+                                
+                                        {% for student in students %}
+                                        
+                                        <tr id="row{{forloop.counter}}">
+                                            
+                                            <td>{{student.user}}</td>
+                                            <td>{{student.user.email}}</td>
+                                            <td>Aktiv</td>
+                                            <td>
+                                                {{classroom.id}}
+                                                <button class="btn btn-danger" type="submit" hx-swap="innerHTML" hx-target="#row{{forloop.counter}}" hx-post="{% url 'remove_student' classroom.id student.id %}">X</button>
+                                            <!--  <a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2"> x</span></a></td> -->
+                                            
+                                        </tr>
+                                    
+                                        {%endfor%}
+                                    </div>
+                                </div>
+                            </table>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+
+<div class="tasks_card  d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="col-sm-8 ">
+            <h4><b>Uppgifter</b></h4>
+        </div>
+        <div>
+            <i class="fa-solid fa-plus"></i>
+        </div>
+
+    </div>
+    <hr>
+    <div>
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="p-0 m-0">Läs kapitel 5</p>
+            <p class="p-0 m-0">8/24</p>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="p-0 m-0">Quiz kapitel 5.1</p>
+            <p class="p-0 m-0">3/24</p>
+
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="p-0 m-0">Hårdkodat</p>
+            <p class="p-0 m-0">13/24</p>
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="p-0 m-0">Hårdkodat</p>
+            <p class="p-0 m-0">23/24</p>
+
+        </div>
+        <div class="d-flex align-items-center justify-content-between">
+            <p class="p-0 m-0">Hårdkodat</p>
+            <p class="p-0 m-0">24/24</p>
+        </div>
+
+    </div>
+</div>
+<div class="result_card  d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="col-sm-8 ">
+            <h4><b>Resultat</b></h4>
+        </div>
+        <div class="col-sm-1">
+            <i class="fas fa-regular fa-chart-simple"></i>
+        </div>
+    </div>
+    <hr>
+    <div class="col-sm-12">
+        <canvas class="" id="myChart"></canvas>
+    </div>
+
+
+</div>
+<div class="knowledge_card  d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="col-sm-8 ">
+            <h4><b>Kunskapskrav och mål</b></h4>
+        </div>
+        <div class="col-sm-1">
+            <i class="fas fa-regular fa-expand"></i>
+        </div>
+    </div>
+    <hr>
+    <div class="d-flex-column">
+        <div>
+            <b>Centralt innehåll:</b>
+            <p>
+                Webben som plattform, dess historia och samhällspåverkan.
+
+                Teknisk orientering om webbens protokoll, adresser, säkerhet och samspelet mellan klient och server.
+
+                Teknisk orientering om webbens protokoll, adresser, säkerhet och samspelet mellan klient och server.
+            </p>
+        </div>
+        <div>
+            <b>Kunskapskrav:</b>
+            <br>
+            <b>Betyget E</b>
+            Eleven beskriver översiktligt webbens historia och dess påverkan på samhället och de grundläggande
+            tekniker som webben bygger på. Eleven använder med ...
+            <br>
+            <b>Betyget C</b>
+            <p>
+                Eleven beskriver översiktligt webbens historia och dess påverkan på samhället och de grundläggande
+                tekniker som webben bygger på. Eleven använder med ...
+            </p>
+        </div>
+    </div>
+
+
+</div>
+<div class="knowledge_card  d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="col-sm-8 ">
+            <h4><b>Kursaktivitet</b></h4>
+        </div>
+        <div class="col-sm-1">
+            <i class="fas fa-regular fa-expand"></i>
+        </div>
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div>
+            <img src="{% static 'profilepage/activitychart.png' %}" alt="">
+        </div>
+    </div>
+</div>
+</div>
+
+
 <script>
-    console.log("hello")
-    let add_btn = document.querySelector('#add_btn');
-    add_btn.addEventListener('click', add_student);
-    function add_student(){
+    window.addEventListener('DOMContentLoaded', function () {
+        const data = {
+            labels: [
+                'Klart',
+                'Påväg',
+                'Efter'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [180, 100, 50],
+                backgroundColor: [
+
+                    'green',
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 205, 86)'
+                ],
+                hoverOffset: 1
+            }]
+        };
+
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {}
+        };
+        const myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+        let add_btn = document.querySelector('#add_btn');
+        add_btn.addEventListener('click', add_student);
+    });
+
+    function add_student() {
         const add_form = document.querySelector('#add_student_form');
-        add_form.style="display:block";
+        add_form.style = "display:block";
         console.log(add_form)
     }
+
     function copy() {
         var copyText = document.getElementById('invite')
         copyText.select();
@@ -74,4 +355,3 @@
     }
 </script>
 {% endblock %}
-

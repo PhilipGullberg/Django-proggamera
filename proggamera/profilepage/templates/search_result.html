@@ -1,15 +1,14 @@
-{%extends 'add_student.html' %}
+
 {% block content%}
-<br>
-<br>
-<div class="stnd-btn" type="button"><a href="{% url 'add_students' classroom.id %}" style="text-decoration: none; color:white;">
-    <i class="fas fa-arrow-left"></i> Gå tillbaks och sök efter annan elev</a></div>
+
 <div id="student_results" class="mr-auto" >
-    <h5>Resultat:</h5>
-    <ul>
     {%for student in students %}
-    
-        <li>{{student}} <span><div class="btn btn-success p-1" type="button"><a href="{% url 'added' classroom.id student.id %}" style="text-decoration: none; color:white;">+ Lägg till</a></span></li>
+    <div class="d-flex-column">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>{{student}} </div>
+            <div class="btn btn-success ms-5" type="button"><a href="{% url 'added' classroom.id student.id %}" style="text-decoration: none; color:white;">+ Lägg till</a></div>
+        </div>
+        <hr>
     {%endfor%}
 </ul>
 </div>

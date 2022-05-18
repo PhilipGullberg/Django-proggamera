@@ -1,5 +1,8 @@
+*:not(.class_header){
+  box-sizing : border-box;
+}
+
 body{
-  background-color:rgb(36, 35, 35) !important;
   transition: all 0.5s ease-in-out;
 }
 .navigation{
@@ -17,7 +20,6 @@ body{
     background: -webkit-linear-gradient(180deg, #FFAB08, #B973DE);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
 }
 .fa-bell{
     color:white;
@@ -105,17 +107,16 @@ body{
     background-position: center;
     background-size: cover;
     height: 100vh;
-    color:White !important;
     transition: 0.5s;
   }
   /* standard button */
   .stnd-btn {
-    background: #D27BDA;
-    background-image: -webkit-linear-gradient(top, #D27BDA, #B530C0);
-    background-image: -moz-linear-gradient(top, #D27BDA, #B530C0);
-    background-image: -ms-linear-gradient(top, #D27BDA, #B530C0);
-    background-image: -o-linear-gradient(top, #D27BDA, #B530C0);
-    background-image: -webkit-gradient(top, #D27BDA, #B530C0);
+    background: #E516F6;
+    background-image: -webkit-linear-gradient(top, #E516F6, #B530C0);
+    background-image: -moz-linear-gradient(top, #E516F6, #B530C0);
+    background-image: -ms-linear-gradient(top, #E516F6, #B530C0);
+    background-image: -o-linear-gradient(top, #E516F6, #B530C0);
+    background-image: -webkit-gradient(top, #E516F6, #B530C0);
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
@@ -142,25 +143,89 @@ body{
     border-radius: 10px;
     text-decoration: none;
  }
-
+.go-button{
+  background: #E516F6;
+  color: white;
+  padding: 15px 12px 14px 10px;
+  text-decoration: none;
+}
+.no-link, .no-link:hover{
+  text-decoration: none;
+  color:white;
+}
  /* Classroom style */
- .classes{
-     display:flex;
-     justify-content: start;
-     gap:5px;
-     flex-wrap: wrap;
- }
-.class{
-    background-color: #B973DE;
-    width: 350px;
-    max-height:470px;
-    border-radius: 5px;
-    padding:2%;
-    margin-top:1%;
+
+.course_group{
+    width: 280px;
+    overflow: hidden;
+    min-height:300px;
+    border: 1px solid #000000;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.student_card{
+    width: 320px;
+    overflow: auto;
+    min-height:350px;
+    border: 1px solid #000000;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+.tasks_card{
+  width: 320px;
+  overflow: auto;
+  min-height:350px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+
+}
+.result_card{
+  width: 320px;
+  overflow: auto;
+  min-height:350px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.icon_drop{
+  padding:5px 15px 5px 15px;
+  border-radius: 100%;
+  
+}
+.icon_drop:hover{
+  background-color: rgb(224, 224, 224);
+}
+.knowledge_card{
+  width: 520px;
+  overflow: auto;
+  min-height:350px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.tasks{
+  text-overflow: ellipsis;
+}
+.course_group:hover{
+  box-shadow: 2px 2px 3px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  
 }
 .class-content{
   max-height:300px;
   overflow:auto;
+}
+
+.class_header{
+  box-shadow: inset 0 0 0 1000px rgba(100, 2, 79, 0.9);
+  background-image: url("webbutvecklingimg.png");
+  border: 1px solid #9664bd;
+  color:white;
+  padding:10px;
+  min-height:70px;
+  border-radius: 8px 8px 0px 0px;
 }
 .displaymore-btn{
   display:none;
@@ -187,6 +252,7 @@ body{
   color:white;
   background-color: rgb(36, 35, 35) ;
   border: 1px solid #dddddd;
+  
   text-align: left;
   padding: 8px;
 }
@@ -212,6 +278,7 @@ body{
 }
 hr{
   border-color: white;
+  margin:3px 0px 8px 0px !important;
 }
 .topbanner{
   background-color: #6d16af;

@@ -2,6 +2,7 @@ from email import message
 from http.client import HTTPResponse
 from msilib.schema import Class
 from multiprocessing import context
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from courses.models import Quiz, VisitedPage
@@ -93,9 +94,10 @@ def s_courses(request):
     
     return render(request, 'student_courses.html',{"courses":courses})
 
-def curr_classroom(request, pk):
+def curr_classroom(request, pk, course):
+    class_path="127.0.0.1:8000/profilepage/student/classroom/"+str(pk)+"/"+str(course)
     classroom = Classroom.objects.get(id=pk)
-    courses=Course.objects.filter(classroom__id=pk)
+    course=Course.objects.get(id=course)
     students=Student.objects.filter(classroom__id=pk)
     if request.method == "POST":
         form = add_course_form(request.POST)
@@ -108,7 +110,7 @@ def curr_classroom(request, pk):
                 classroom.courses.add(chosen_courses[0])
     else:
         form=add_course_form()
-    context={'classroom':classroom, 'courses':courses,'students':students,'form':form}
+    context={'classroom':classroom, 'course':course,'students':students,'form':form, "code":class_path}
     return render(request,'classroom.html',context)
 
 def add_students(request, pk):
@@ -164,15 +166,13 @@ def add_student_to_classroom(request,pk):
     return render(request, 'student_classrooms.html',{'classes':classes})
 
 
-def remove_student(request, student, classroom):
+def remove_student(request, classroom, student):
     curr_student=Student.objects.get(id=student)
     curr_classroom=Classroom.objects.get(id=classroom)
     curr_classroom.students.remove(curr_student)
-
-    courses=Course.objects.filter(classroom__id=classroom)
     students=Student.objects.filter(classroom__id=classroom)
-    context={'classroom':curr_classroom, 'courses':courses,'students':students}
-    return render(request,'classroom.html',context)
+    context={'classroom':curr_classroom, 'students':students}
+    return HttpResponse("")
 
 def add_class(request):
     return render(request,'teacher_classroom.html')
@@ -191,9 +191,10 @@ def search_students(request, pk):
     if request.method=="POST":
         search_text=request.POST.get("search")
         result=Student.objects.filter(user__username__contains=search_text)
+        print(result)
     else:
         result=""
-    return render(request, 'search_result.html',{'students':result, 'classroom':curr_classroom})
+    return render(request, 'search_result.html',{'students':result,"classroom":curr_classroom})
 
 def added(request, pk, student):
     curr_classroom=Classroom.objects.get(id=pk)
@@ -203,7 +204,7 @@ def added(request, pk, student):
     for course in class_courses:
         curr_student.courses.add(course)
     message= f"Lade till {curr_student}"
-    return render(request, 'add_student.html',{'classroom':curr_classroom, "message":message})
+    return render(request, 'classroom.html')
 
 def t_results(request):
     curr_teacher=Teacher.objects.get(user=request.user)
@@ -229,3 +230,16 @@ def t_overview_s_detail(request, classid, courseid, studentid):
     course_chapters=Chapters.objects.filter(course=curr_course)
     visitedpages=VisitedPage.objects.all()
     return render(request, "t_result_s_detail.html",{"student":curr_student, "classroom":curr_class, "course":curr_course,"visited":visitedpages,"chapters":course_chapters})
+
+def t_excercises(request):
+    return render(request,"t_excercises.html")
+
+def t_add_excercise(request):
+    curr_teacher=Teacher.objects.get(user=request.user)
+    if request.method == "POST":
+        form = add_student_form(request.POST)
+        
+    else:
+
+        form = add_excercise_form(user=curr_teacher)
+    return render(request,"t_add_excercise.html",{'form':form})

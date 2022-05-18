@@ -1,10 +1,6 @@
 $(document).ready( function () {
     
-
-    
-
-
-
+  
     let videoelement=document.querySelectorAll('.video-data');
 
     for (let i =0; i <videoelement.length; i++){
