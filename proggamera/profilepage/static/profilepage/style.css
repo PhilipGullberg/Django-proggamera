@@ -172,8 +172,11 @@ body{
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
 }
+.link-icon {
+  color:#6d16af !important;
+}
 .tasks_card{
-  width: 320px;
+  width: 375px;
   overflow: auto;
   min-height:350px;
   border: 1px solid #000000;
@@ -183,6 +186,29 @@ body{
 }
 .result_card{
   width: 320px;
+  overflow: auto;
+  min-height:350px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.homework_button{
+  border:1px solid black;
+  padding: 2px 1px 2px 1px; 
+}
+.excercise_form{
+  justify-content: center;
+  display:flex;
+  align-items: center;
+  width: 120px;
+  overflow: auto;
+  min-height:100px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.active_excercise_card{
+  width: 375px;
   overflow: auto;
   min-height:350px;
   border: 1px solid #000000;
@@ -201,6 +227,14 @@ body{
   width: 520px;
   overflow: auto;
   min-height:350px;
+  border: 1px solid #000000;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+.give_excercise_card{
+  width: 720px;
+  overflow: auto;
+  min-height:450px;
   border: 1px solid #000000;
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   border-radius: 8px;

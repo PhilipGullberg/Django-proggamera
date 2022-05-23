@@ -29,7 +29,6 @@ def subchapter(request,courseid,chapterid, pageid):
     curr_chapter=Chapters.objects.get(chapter_number=chapterid, course__id=courseid)
     subchapters=Subchapters.objects.filter(parent_chapter=curr_chapter)
     
-    videos=Videos.objects.filter()
     p=Paginator(subchapters,1)
     
     pageid = request.GET.get('page')
@@ -37,11 +36,14 @@ def subchapter(request,courseid,chapterid, pageid):
     if(pageid):
         curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(int(pageid)-1))
     else:
-        curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(1))
+        curr_subchapter=Subchapters.objects.get(parent_chapter=curr_chapter,subchapter_number=(0))
 
     if not VisitedPage.objects.filter(student=curr_student, subchapter=curr_subchapter).exists():
         VisitedPage(student=curr_student,page=request.build_absolute_uri(), visited=True, subchapter=curr_subchapter).save()
-
+    try:              
+        video=Videos.objects.get(parent=curr_subchapter)
+    except Videos.DoesNotExist:
+        video="none"
     curr_fillblanks= FillInBlanks.objects.filter(subchapter=curr_subchapter)
     try:
         student_fill_result=FillInBlanksResults.objects.filter(parent=curr_fillblanks[0],student=curr_student)
@@ -100,15 +102,17 @@ def subchapter(request,courseid,chapterid, pageid):
                 count+=1
         #implement so student can save result for specific quiz
         num_questions=len(answer_dic)-1
-        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':score, 'num_questions':num_questions,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
+
+        
+        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':score, 'num_questions':num_questions,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result,'video':video})
     try:
         data=Quizresult.objects.filter(quiz=curr_quiz[0],students=curr_student)
         if data.exists():
-            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':data[0].result, 'num_questions':len(curr_quiz),'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
+            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'score':data[0].result, 'num_questions':len(curr_quiz),'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result,'video':video})
         else:
-            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
+            return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result,'video':video})
     except IndexError:
-        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result})
+        return render(request,"course.html", {"course":curr_course,"chapters":chapters, "page_obj": page_obj,'fill_in_blanks':curr_fillblanks,"student_fill_result":student_fill_result,'video':video})
 
 def timer(request, videoid):
     data=list(request.POST.items())

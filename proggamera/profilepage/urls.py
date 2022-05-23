@@ -10,8 +10,12 @@ urlpatterns = [
     path('student/classroom', views.s_classroom, name="s_classroom"),
     path('student/classroom/add/<int:pk>',views.add_student_to_classroom, name="student_code"),
     path('student/courses', views.s_courses, name="s_courses"),
+
+    
     path('teacher/classroom/', views.t_classroom, name="t_classroom"),
     path('teacher/excercises/', views.t_excercises, name="t_excercises"),
+    path('teacher/excercises/remove/<int:pk>', views.t_remove_excercise, name="t_remove_excercise"),
+    path('teacher/excercises/<int:classid>/<int:courseid>', views.t_excercises_course, name="t_excercises_course"),
     path('teacher/excercises/add', views.t_add_excercise, name="t_add_excercise"),
     path('teacher/results',views.t_results, name="t_results"),
     path('teacher/results/<int:classid>/<int:courseid>/overview',views.t_overview, name="result_overview"),
@@ -20,6 +24,6 @@ urlpatterns = [
     path('teacher/classroom/<int:pk>/add', views.add_students, name="add_students"),
     path('teacher/classroom/<int:classroomid>/add/code', views.add_students_code, name="add_students_code"),
     path('teacher/classroom/<int:pk>/search_students/', views.search_students, name="search_students"),
-    path('teacher/classroom/<int:pk>/search_students/added/<int:student>', views.added, name="added"),
+    path('teacher/classroom/<int:pk>/add/<int:student>', views.added, name="added"),
     path('teacher/classroom/remove/<int:classroom>/<str:student>', views.remove_student , name="remove_student"),
 ]

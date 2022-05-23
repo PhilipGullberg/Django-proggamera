@@ -1,15 +1,15 @@
 
 {% block content%}
-
 <div id="student_results" class="mr-auto" >
     {%for student in students %}
     <div class="d-flex-column">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center justify-content-between row{{forloop.counter}}">
             <div>{{student}} </div>
-            <div class="btn btn-success ms-5" type="button"><a href="{% url 'added' classroom.id student.id %}" style="text-decoration: none; color:white;">+ Lägg till</a></div>
+            <div class="btn btn-success ms-5" type="button">
+                <a type="submit" hx-swap="innerHTML" hx-target =".row{{forloop.counter}}" hx-post="{% url 'added' classroom.id student.id %}" style="text-decoration: none; color:white;">+ Lägg till</a></div>
         </div>
         <hr>
+    </div>
     {%endfor%}
-</ul>
 </div>
 {%endblock%}

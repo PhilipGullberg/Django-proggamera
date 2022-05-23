@@ -57,7 +57,7 @@
                 <i class="pe-2 fas fa-regular fa-check"></i>
             </div>
 
-            <!-- <a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2">  x</span></a> </li> -->
+        
 
             {%endfor%}
         </div>
@@ -111,7 +111,7 @@
                                         <br>
                                         <br>
                                     <div id="search-results">
-                                      
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -166,19 +166,19 @@
                                 </tr>
                                 
                                         {% for student in students %}
+                                            
+                                            <tr id="row{{forloop.counter}}">
+                                                
+                                                <td>{{student.user}}</td>
+                                                <td>{{student.user.email}}</td>
+                                                <td>Aktiv</td>
+                                                <td>
+                                                
+                                                    <button class="btn btn-danger" type="submit" hx-swap="innerHTML" hx-target="#row{{forloop.counter}}" hx-post="{% url 'remove_student' classroom.id student.id %}">X</button>
+                                            
+                                                
+                                            </tr>
                                         
-                                        <tr id="row{{forloop.counter}}">
-                                            
-                                            <td>{{student.user}}</td>
-                                            <td>{{student.user.email}}</td>
-                                            <td>Aktiv</td>
-                                            <td>
-                                                {{classroom.id}}
-                                                <button class="btn btn-danger" type="submit" hx-swap="innerHTML" hx-target="#row{{forloop.counter}}" hx-post="{% url 'remove_student' classroom.id student.id %}">X</button>
-                                            <!--  <a href="{% url 'remove_student' classroom.id student.id %}"> <span class="btn btn-danger pb-0 pl-2 pr-2 pt-0 ml-2"> x</span></a></td> -->
-                                            
-                                        </tr>
-                                    
                                         {%endfor%}
                                     </div>
                                 </div>
@@ -203,44 +203,43 @@
             <h4><b>Uppgifter</b></h4>
         </div>
         <div>
-            <i class="fa-solid fa-plus"></i>
+            <a class="link-icon" href="{% url 't_excercises_course' classroom.id course.id%} "><i class="fa-solid fa-arrow-right"></i></a>
         </div>
 
     </div>
     <hr>
-    <div>
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="p-0 m-0">Läs kapitel 5</p>
-            <p class="p-0 m-0">8/24</p>
-        </div>
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="p-0 m-0">Quiz kapitel 5.1</p>
-            <p class="p-0 m-0">3/24</p>
-
-        </div>
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="p-0 m-0">Hårdkodat</p>
-            <p class="p-0 m-0">13/24</p>
-        </div>
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="p-0 m-0">Hårdkodat</p>
-            <p class="p-0 m-0">23/24</p>
-
-        </div>
-        <div class="d-flex align-items-center justify-content-between">
-            <p class="p-0 m-0">Hårdkodat</p>
-            <p class="p-0 m-0">24/24</p>
-        </div>
-
-    </div>
+    <table class="w-100">
+        <tr >
+            <th>Typ</th>
+            <th>Kapitel</th>
+            <th>Deadline</th>
+            <th>Resultat</th>
+        </tr>
+        {% for excercise in classroom.excercise_set.all %}
+            {% if excercise.course == course%}
+            <tr >
+                    <td>
+                        {{excercise.excercise_type}}</td> 
+                        <td>{{excercise.subchapter.parent_chapter.chapter_number}}.{{excercise.subchapter.subchapter_number}}
+                            {{excercise.subchapter}}</td>
+                        <td class="text-center">
+                        {{excercise.deadline.day}}/{{excercise.deadline.month}}
+                    </td>
+                    <td class="text-center"><a class="link-icon" href="{% url 'result_overview' classroom.id course.id%}"><i class="fas fa-regular fa-chart-simple"></i></a></td>
+                    </div>
+            </tr>
+            {%endif%}
+        
+        {%endfor%}
+    </table>
 </div>
 <div class="result_card  d-flex-column mt-4 mb-1 p-4 flex-basis-auto position-relative">
     <div class="d-flex justify-content-between align-items-center">
         <div class="col-sm-8 ">
-            <h4><b>Resultat</b></h4>
+            <h4><b>Uppföljning</b></h4>
         </div>
         <div class="col-sm-1">
-            <i class="fas fa-regular fa-chart-simple"></i>
+            <a class="link-icon" href="{% url 'result_overview' classroom.id course.id %}"><i class="fas fa-regular fa-chart-simple"></i></a>
         </div>
     </div>
     <hr>

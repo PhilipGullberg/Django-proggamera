@@ -83,22 +83,22 @@
         <!-- <pre><div class="editor"></div></pre>
             <input id="run-button" type="submit" value="Kör"> -->
 
-
-
-
-
-
-        <div class="course-content pt-3 ">
-            <h3><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
-        </div>
-        <div id="player">
-            {% video subchapter.video.video 'tiny' %}
-           
-        </div>
-        <form class="timerform" hx-post="{% url 'timer' subchapter.video.id %}" hx-swap="none">
-            <input  id="timer" type="hidden" value="0" name="{{request.build_absolute_uri}}">
-            <input id="timerformsubmit" type="submit" style="display:none">
-        </form>
+    <div class="course-content pt-3 ">
+        <h3><b>{{subchapter.subchapter_number}}. {{subchapter}}</b></h3>
+    </div>
+    {% if video %}
+        {% if video.parent == subchapter %}
+                <div id="player">
+                    {% video video.video 'tiny' %}
+                
+                </div>
+                <form class="timerform" hx-post="{% url 'timer' video.id %}" hx-swap="none">
+                    <input  id="timer" type="hidden" value="0" name="{{request.build_absolute_uri}}">
+                    <input id="timerformsubmit" type="submit" style="display:none">
+                </form>
+        {%endif%}
+                    
+    {%endif%}
         <div class=" pb-4 ">
             <p class="text-justify">{% autoescape off %}{{subchapter.content}}{% endautoescape %}</p>
         </div>
