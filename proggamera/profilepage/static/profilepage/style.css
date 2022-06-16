@@ -283,7 +283,7 @@ body{
 }
 
 .table td, .table th {
-  color:white;
+  color:black;
   background-color: rgb(36, 35, 35) ;
   border: 1px solid #dddddd;
   
@@ -291,7 +291,7 @@ body{
   padding: 8px;
 }
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
-  color:White !important;
+  color:black !important;
 }
 .dataTables_wrapper .dataTables_length select{
   background-color: white !important;
@@ -340,10 +340,10 @@ hr{
   border-color: rgb(206, 205, 205);
 }
 .nav-item button{
-  color:white;
+  color:black !important;
 }
  .nav-link:hover {
-  color:white !important;
+  color:grey !important;
   background-color: transparent;
 }
 .nav-item .active:hover{
@@ -351,17 +351,18 @@ hr{
 }
 .table{
   overflow-x: auto;
-  color:White !important;
+  color:black !important;
 
 }
-.table>:not(caption)>*>*{
-  background-color: rgb(36, 35, 35) !important;
+.table th, .table td{
+  color:black;
 }
 .table td, .table th{
   border-right-width: 1px;
 }
 .fill.fa-wpforms {
   font-size:24px;
+  color:#000000;
 }
 .fa-wpforms#right{
     color: #03BA15;

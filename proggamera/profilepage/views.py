@@ -242,9 +242,10 @@ def t_overview(request, classid, courseid):
     curr_course = Course.objects.get(id=courseid)
     course_chapters = Chapters.objects.filter(course=curr_course)
     course_students = Student.objects.filter(
-        courses=curr_course, classroom=curr_classroom)
+    courses=curr_course, classroom=curr_classroom)
     visitedpages = VisitedPage.objects.all()
-    return render(request, 't_result_overview.html', {"teacher": curr_teacher, "course": curr_course, "classroom": curr_classroom, "chapters": course_chapters, "students": course_students, "visited": visitedpages})
+    videos=Videos.objects.all()
+    return render(request, 't_result_overview.html', {"videos":videos,"teacher": curr_teacher, "course": curr_course, "classroom": curr_classroom, "chapters": course_chapters, "students": course_students, "visited": visitedpages})
 
 
 def t_overview_s_detail(request, classid, courseid, studentid):

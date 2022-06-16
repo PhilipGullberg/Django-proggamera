@@ -195,7 +195,7 @@
                                     {%endif%}
 
                                     {%endfor%}
-                                    <img id="iconnull" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                    <img id="iconnull" src="{%static 'profilepage/ic_quiz_black.png' %}"></img>
 
                                     {%endif%}
                                 </div>
@@ -211,7 +211,7 @@
                                     {%endif%}
                                     {%endif%}
                                     {%endfor%}
-                                    <i class="fa-brands fa-wpforms"></i>
+                                    <i style="color:black" class="fa-brands fa-wpforms"></i>
 
 
                                     {%endif%}
@@ -224,19 +224,29 @@
                                     {%endif%}
                                     {%endif%}
                                     {%endfor%}
-                                    <i style="color:white" class="fa-solid fa-book"></i>
+                                    <i style="color:black" class="fa-solid fa-book"></i>
                                 </div>
                                 <div class="video-data">
+                                   
+                                    {% if videos %}
 
-                                    {% if subchapter.video %}
-    
-                                        {% for video in subchapter.video.videowatched_set.all %}
-                                        
-                                            {% if student == video.student %}
-                                            <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                        {% for video in videos %}
+                                            {% if video.parent == subchapter %}
+                                             
+                                                {% for videostudent in video.videowatched_set.all%}
+                                                    {% if videostudent.student == student %}
+                                                    <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                                    {%endif%}
+                                                {%endfor%}
+                                                <img src="{% static 'profilepage/icon-video-black.png'%}">
+
+                                                
+                                           
+                                                
+                                                
                                             {%endif%}
                                         {%endfor%}
-                                        <img src="{% static 'profilepage/icon-video.png'%}">
+                                        
                                     {%endif%}
 
 
@@ -526,27 +536,24 @@
                                     {%endif%}
                                     {%endif%}
                                     {%endfor%}
-                                    <i style="color:white" class="fa-solid fa-book"></i>
+                                    <i style="color:black !important" class="fa-solid fa-book"></i>
                                 </div>
                                 <div class="video-data">
+                                    {% if videos %}
 
-                                    {% if subchapter.video %}
-                                    
-                                        {% for video in subchapter.video.videowatched_set.all %}
-                                        
-                                            {% if student == video.student %}
-                                            <img class="hasseen" id="seensolo" src="{% static 'profilepage/icon-video-green.png'%}">
-                                            {% for video in student.videowatched_set.all %}
-                                                {%if video.video == subchapter.video%}
-                                                    Tid: {{video.watchtime}}s
+                                    {% for video in videos %}
+                                        {% if video.parent == subchapter %}
+                                            {% for videostudent in video.videowatched_set.all%}
+                                                {% if videostudent.student == student %}
+                                                <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                                Tid: {{videostudent.watchtime}}s
                                                 {%endif%}
                                             {%endfor%}
-                                            
-                                            {%endif%}
-                                        {%endfor%}
-                                        <img id="seensolo" src="{% static 'profilepage/icon-video.png'%}">
-
-                                    {%endif%}
+                                            <img src="{% static 'profilepage/icon-video-black.png'%}">
+                                        {%endif%}
+                                    {%endfor%}
+                                    
+                                {%endif%}
 
 
                                 </div>
@@ -563,6 +570,206 @@
 
     <div class="tab-pane fade" id="excercise" role="tabpanel" aria-labelledby="excercises-tab">
         <h3>Här kan du följa vilka uppgifter som dina elever har gjort</h3>
+        <div class="resultpage py-3">
+            <h4 class="pb-3">Här kan du se all data på dina elevers framsteg.</h4>
+            <a class="btn bg-light mb-2" data-toggle="collapse" href="#collapseExample" role="button"
+                aria-expanded="false" aria-controls="collapseExample">
+                Klicka här för mer info om vad tabellen visar
+            </a>
+            <div class="collapse " id="collapseExample">
+                <div class="card-body mb-3 bg-light text-dark">
+                    <h3 class="mb-3">Vad betyder ikonerna?</h3>
+                    <div class="d-flex justify-content-between">
+                        <div class="pe-4 ps-3 ">
+                            <h5>Quiz</h5>
+
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon me-2 bg-dark"
+                                    src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                <p class="m-0">Innebär att eleven har klarat quizet</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                <p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz</p>
+                            </div>
+                        </div>
+                        <div class="me-5 pe-5">
+                            <h5>Fill in the blanks</h5>
+
+                            <div class="d-flex align-items-center">
+                                <i class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the
+                                blanks och eleven inte gjort det</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat
+                                fill in the blanks</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har
+                                klarat fill in the blanks</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <div class="pe-4 ps-3 ">
+                            <h5>Kollat video</h5>
+
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon me-2 bg-dark"
+                                    src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz och eleven inte gjort det</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                <p class="m-0">Innebär att eleven har klarat quizet</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                <p class="m-0">Innebär att eleven gjort quizet men inte haft rätt</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img class="quiz-icon pe-2" src="{%static 'profilepage/icquiznullwhite.png' %}"></img>
+                                <p class="m-0">Innebär att kapitlet har ett quiz</p>
+                            </div>
+                        </div>
+                        <div class="me-5 pe-5">
+                            <h5>Läst kapitel</h5>
+
+                            <div class="d-flex align-items-center">
+                                <i class="fill fa-brands fa-wpforms pe-2"></i>Innebär att kapitlet har en fill in the
+                                blanks och eleven inte gjort det</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i id="right" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven har klarat
+                                fill in the blanks</p>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i id="wrong" class="fill fa-brands fa-wpforms pe-2"></i>Innebär att eleven ej har
+                                klarat fill in the blanks</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class=" mb-5 me-5">
+                <table class="table " id="all_table">
+                    <thead>
+                        <tr>
+                            <th>Elev/Kapitel</th>
+                            
+                            {%for chapter in chapters %}
+                                {% for subchapter in chapter.sub.all%}
+                                {{subchapter.excercise_set.all}}
+                                    {% if subchapter.excercise_set.all %}
+                                        <th>{{chapter.chapter_number}}.{{subchapter.subchapter_number}} {{subchapter}} </th>
+                                    {%endif%}
+                                {%endfor%}
+                            {%endfor%}
+                        </tr>
+                    </thead>
+
+                    {% for student in students %}
+                    <tr>
+                        <th ><a href="{% url 'result_detail' classroom.id course.id student.id %}">{{student}}</a> </th>
+
+                        {%for chapter in chapters %}
+                        {% for subchapter in chapter.sub.all%}
+                        {% if subchapter.excercise_set.all %}
+                        <td>
+                            <div class="d-flex align-items-center gap-2 ">
+                                <!-- Code to show results of quizes-->
+                                <div class="quiz-data">
+                                    {% if subchapter.quiz_set.all %}
+                                    {% for quizresult in subchapter.quiz_set.all.first.quizresult_set.all%}
+                                    {% if student == quizresult.students%}
+                                    {% if quizresult.result == 1 %}
+                                    <img class="quiz-icon" src="{%static 'profilepage/icquiz.png' %}"></img>
+                                    {%else%}
+                                    <img class="quiz-icon" src="{%static 'profilepage/icquizwrong.png' %}"></img>
+                                    {%endif%}
+                                    {%endif%}
+
+                                    {%endfor%}
+                                    <img id="iconnull" src="{%static 'profilepage/ic_quiz_black.png' %}"></img>
+
+                                    {%endif%}
+                                </div>
+                                <div class="fill-data ">
+                                    <!--Code to show results for fillinblanks-->
+                                    {% if subchapter.fillinblanks_set.all %}
+                                    {% for fillresult in subchapter.fillinblanks_set.all.first.fillinblanksresults_set.all %}
+                                    {% if student == fillresult.student %}
+                                    {% if fillresult.result == 1 %}
+                                    <i id="right" class="fa-brands fa-wpforms"></i>
+                                    {%else%}
+                                    <i id="wrong" class="fa-brands fa-wpforms"></i>
+                                    {%endif%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    <i style="color:black" class="fa-brands fa-wpforms"></i>
+
+
+                                    {%endif%}
+                                </div>
+                                <div class="read-data">
+                                    {% for page in visited %}
+                                    {% if student == page.student %}
+                                    {% if page.subchapter == subchapter %}
+                                    <i id="right" class="fa-solid fa-book"></i>
+                                    {%endif%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    <i style="color:black" class="fa-solid fa-book"></i>
+                                </div>
+                                <div class="video-data">
+                                   
+                                    {% if videos %}
+
+                                        {% for video in videos %}
+                                            {% if video.parent == subchapter %}
+                                             
+                                                {% for videostudent in video.videowatched_set.all%}
+                                                    {% if videostudent.student == student %}
+                                                    <img src="{% static 'profilepage/icon-video-green.png'%}">
+                                                    {%endif%}
+                                                {%endfor%}
+                                                <img src="{% static 'profilepage/icon-video-black.png'%}">
+
+                                                
+                                           
+                                                
+                                                
+                                            {%endif%}
+                                        {%endfor%}
+                                        
+                                    {%endif%}
+
+
+                                </div>
+                            </div>
+                            {%endif%}
+                            {%endfor%}
+                        </td>
+                        
+                        {%endfor%}
+                    </tr>
+                    
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 
