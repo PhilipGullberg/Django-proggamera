@@ -6,7 +6,7 @@
 ### 2. Lärare kan ge elever läxor och tilldela vilka kapitel och uppgifter som ska göras
 ### 3. Lärare kan följa elevers utveckling och resultat 
 
-## Hemsidans funktioner - Lärare
+## Hemsidans funktioner - Elever
 ### 1. Elever har tillgång till läromedel inom sina programmeringskurser
 ### 2. Elever kan se vart de senast var i kursen
 ### 3. Elever kan se hur det går för de i kursen, resultat på läxor etc.
